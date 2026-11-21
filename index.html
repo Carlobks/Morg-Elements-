@@ -1,0 +1,377 @@
+<title>Morg Elements</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: circle as the opening act, then four element columns, then the sources behind them. */
+:root{
+  --bg:#eef0f2; --surface:#f8f9fa; --fg:#1b1f26; --muted:#5b6370; --line:#c9ced6;
+  --fogo:#cf4f27; --ar:#8a7fd0; --agua:#2b7aa3; --terra:#8a6d3b;
+  --on:#ffffff;
+  --display:"Marcellus","Cormorant Garamond",Georgia,serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12151b; --surface:#1a1e26; --fg:#e7e9ee; --muted:#9aa2b0; --line:#323845;
+  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151b; --surface:#1a1e26; --fg:#e7e9ee; --muted:#9aa2b0; --line:#323845;
+  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+sup.r a{font-family:var(--mono);font-size:.68em;color:var(--muted);text-decoration:none;padding:0 1px}
+sup.r a:hover,sup.r a:focus-visible{color:var(--fg);text-decoration:underline}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Hero */
+header.hero{padding-block:32px 8px;text-align:center}
+header.hero h1{font-size:clamp(2.4rem,7vw,4.2rem);letter-spacing:.06em}
+.warn{margin-top:10px;font-size:15px;color:var(--muted)}
+.warn strong{color:var(--fg);font-weight:600}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px;padding-block:8px 24px}
+#circle{width:min(100%,620px);height:auto;overflow:visible}
+#circle text{font-family:var(--body);fill:var(--fg)}
+#circle .sub{font-size:13px;font-weight:500}
+#circle .tname{font-family:var(--display);font-size:16.5px}
+#circle .tel{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;fill:var(--muted);text-transform:uppercase}
+#circle .axl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;fill:var(--muted)}
+#circle .ring{fill:none;stroke:var(--fg);stroke-width:1.6}
+#circle .axis{stroke:var(--fg);stroke-width:1.2}
+#circle .div{stroke:var(--bg);stroke-width:2}
+#circle .sector{cursor:pointer;transition:filter .2s}
+#circle .sector:hover,#circle .sector:focus-visible{filter:brightness(1.12) saturate(1.1);outline:none}
+.legend{font-size:13px;color:var(--muted);text-align:center;max-width:56ch}
+.btn{font:500 13px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 16px;cursor:pointer}
+.btn:hover{border-color:var(--fg)}
+
+/* Animation: only while .play is on the svg, so the resting state is always complete */
+.play .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw var(--t,1.4s) cubic-bezier(.6,.05,.3,1) var(--d,0s) forwards}
+.play .fade{opacity:0;animation:fade .9s ease var(--d,0s) forwards}
+.play .grow{opacity:0;transform:scale(.6);transform-origin:0 0;animation:grow 1s cubic-bezier(.2,.8,.2,1) var(--d,0s) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@keyframes grow{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.play .draw,.play .fade,.play .grow{animation:none;opacity:1;transform:none;stroke-dashoffset:0}}
+
+/* Sections */
+section{padding-block:40px}
+section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.4rem)}
+.lead{color:var(--muted);max-width:68ch;margin-top:8px}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.jump a{font-size:14px;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 14px;display:inline-flex;gap:8px;align-items:center}
+.jump a i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-top:24px;align-items:start}
+@media (min-width:1150px){.cols{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0;scroll-margin-top:16px}
+.card .top{padding:18px 18px 14px;border-top:5px solid var(--c)}
+.card h3{font-size:1.75rem}
+.card .el{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:2px 7px;color:var(--muted)}
+.card .body{padding:0 18px 18px;display:flex;flex-direction:column;gap:14px;font-size:15px}
+.card h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.fa{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
+.fa b{font-weight:600}
+.src{font-size:13px;color:var(--muted)}
+.subs{display:flex;flex-direction:column;gap:10px}
+.sub{border:1px solid var(--line);border-left:4px solid var(--sc);border-radius:6px;padding:10px 12px;scroll-margin-top:16px;transition:background .4s}
+.sub.hl{background:color-mix(in oklab,var(--sc) 16%,transparent)}
+.sub .sh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sub .sh strong{font-family:var(--display);font-size:1.2rem;font-weight:400}
+.sub .sh small{font-size:12px;color:var(--muted);text-align:right}
+.sub p{font-size:14px;margin-top:4px}
+.sub dl{margin:8px 0 0;display:grid;gap:4px;font-size:13.5px}
+.sub dt{font-weight:600;display:inline}
+.sub dd{display:inline;margin:0}
+.opp{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
+
+.prose{max-width:70ch;display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.tblw{overflow-x:auto;margin-top:18px}
+table{border-collapse:collapse;font-size:14px;min-width:560px;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+
+.timeline{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:0;max-width:820px}
+.timeline li{display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.timeline .when{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.timeline b{font-weight:600}
+@media (max-width:480px){.timeline li{grid-template-columns:1fr;gap:2px}}
+
+.refs{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:12px;max-width:900px}
+.refs li{display:grid;grid-template-columns:34px 1fr;gap:10px;font-size:14px;scroll-margin-top:16px}
+.refs li:target{background:color-mix(in oklab,var(--ar) 14%,transparent);border-radius:6px}
+.refs .n{font-family:var(--mono);color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.refs .use{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;border-radius:4px;padding:1px 6px;margin-top:4px;border:1px solid}
+.pill.ok{color:var(--agua);border-color:var(--agua)}
+.pill.part{color:var(--terra);border-color:var(--terra)}
+.pill.no{color:var(--muted);border-color:var(--line)}
+.note{margin-top:22px;max-width:70ch;font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Melancólico · Sanguíneo · Fleumático · Colérico</p>
+    <h1>Morg Elements</h1>
+    <p class="warn"><strong>Nada aqui deve ser levado como verdade.</strong> É um estudo de uma tradição antiga, não ciência.</p>
+  </div>
+</header>
+
+<div class="wrap stage">
+  <svg id="circle" viewBox="-300 -290 600 580" role="img" aria-labelledby="ctitle">
+    <title id="ctitle">Círculo dos temperamentos: sanguíneo (ar) em cima à esquerda, colérico (fogo) em cima à direita, melancólico (terra) embaixo à direita, fleumático (água) embaixo à esquerda. Em cima ficam os expansivos, à direita os marcados.</title>
+    <g id="g-core"></g>
+    <g id="g-sectors"></g>
+    <g id="g-lines"></g>
+    <g id="g-labels"></g>
+  </svg>
+  <p class="legend">Toque num subtipo para ir à sua explicação. Cada elemento tem um centro neutro e muda de forma ao se aproximar de um vizinho.</p>
+  <button class="btn" id="replay" type="button">Rever a animação</button>
+</div>
+
+<section id="temperamentos">
+  <div class="wrap">
+    <p class="eyebrow">Os quatro elementos</p>
+    <h2>Os temperamentos e seus subtipos</h2>
+    <p class="lead">Cada temperamento tem uma base e três formas. A do centro é neutra e as outras duas se inclinam para um vizinho. O subtipo deseja algo do vizinho, mas a pessoa precisa lembrar sempre da sua base.</p>
+    <nav class="jump" id="jump" aria-label="Ir para um temperamento"></nav>
+    <div class="cols" id="cols"></div>
+  </div>
+</section>
+
+<section id="leitura">
+  <div class="wrap">
+    <p class="eyebrow">Como ler o círculo</p>
+    <h2>Os eixos nas fontes</h2>
+    <div class="prose">
+      <p>Em cima ficam os <b>expansivos</b> e embaixo os <b>não expansivos</b>. À direita ficam os <b>marcados</b>, que sentem forte e guardam o que sentem, e à esquerda os <b>não marcados</b>. Autores diferentes chegaram a divisões muito parecidas.</p>
+    </div>
+    <div class="tblw">
+      <table>
+        <thead><tr><th>Fonte</th><th>Cima × baixo</th><th>Direita × esquerda</th><th>Diagonais</th></tr></thead>
+        <tbody>
+          <tr><td>Wundt<sup class="r"><a href="#ref8">8</a></sup></td><td>Rápidos × lentos</td><td>Fortes × fracos</td><td>—</td></tr>
+          <tr><td>Kant<sup class="r"><a href="#ref7">7</a></sup></td><td>—</td><td>—</td><td>Sentimento (sanguíneo × melancólico) e atividade (colérico × fleumático), opostos dentro de cada par</td></tr>
+          <tr><td>Eysenck<sup class="r"><a href="#ref12">12</a></sup></td><td>Extrovertidos × introvertidos</td><td>Instáveis × estáveis</td><td>—</td></tr>
+          <tr><td>Aristóteles<sup class="r"><a href="#ref3">3</a></sup></td><td>Quente (ar, fogo) × frio (água, terra)</td><td>Seco (fogo, terra) × úmido (ar, água)</td><td>Contrários: fogo × água, ar × terra</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A linha de Aristóteles na tabela é uma correspondência que nós observamos. Ele descreve as qualidades dos elementos, não temperamentos de pessoas.</p>
+
+    <div class="prose" style="margin-top:28px">
+      <h3 style="font-size:1.5rem">Por que os subtipos olham para os vizinhos</h3>
+      <p>Para Aristóteles, elementos vizinhos compartilham uma qualidade e passam um ao outro com facilidade. A água vira ar quando o frio dá lugar ao quente, e por isso a geração dos elementos forma um ciclo. Elementos sem nada em comum mudam com mais dificuldade.<sup class="r"><a href="#ref3">3</a></sup> O vapor é água puxada pelo calor do ar, e o gelo é água dominada pelo frio da terra.</p>
+      <p>Por isso não existe subtipo na direção do oposto. Kant afirma que temperamentos opostos não se somam, apenas se anulam, e ele nem aceita temperamentos compostos.<sup class="r"><a href="#ref7">7</a></sup> Galeno, com suas misturas,<sup class="r"><a href="#ref5">5</a></sup> Steiner, com a ideia de um temperamento que predomina e dá o tom aos outros,<sup class="r"><a href="#ref9">9</a></sup> e LaHaye, com o temperamento primário e o secundário,<sup class="r"><a href="#ref11">11</a></sup> ficam mais perto da ideia de subtipos.</p>
+    </div>
+  </div>
+</section>
+
+<section id="origem">
+  <div class="wrap">
+    <p class="eyebrow">Origem das ideias</p>
+    <h2>De Empédocles a Eysenck</h2>
+    <ol class="timeline">
+      <li><span class="when">c. 450 a.C.</span><span><b>Empédocles.</b> Fogo, ar, água e terra são as quatro raízes de todas as coisas.<sup class="r"><a href="#ref1">1</a></sup></span></li>
+      <li><span class="when">c. 400 a.C.</span><span><b><i>Da natureza do homem</i></b> (Corpus Hippocraticum). O corpo tem sangue, fleuma, bile amarela e bile negra, e a saúde depende da boa mistura entre eles. Cada humor cresce numa estação: a fleuma no inverno, o sangue na primavera, a bile amarela no verão e a bile negra no outono.<sup class="r"><a href="#ref2">2</a></sup></span></li>
+      <li><span class="when">séc. IV a.C.</span><span><b>Aristóteles.</b> Cada elemento tem duas qualidades e os vizinhos se transformam em ciclo.<sup class="r"><a href="#ref3">3</a></sup> Nos <i>Problemas</i> atribuídos a ele, a melancolia aparece ligada a pessoas de destaque na filosofia, na política e nas artes.<sup class="r"><a href="#ref4">4</a></sup></span></li>
+      <li><span class="when">séc. II d.C.</span><span><b>Galeno.</b> Descreve nove misturas de quente, frio, seco e úmido<sup class="r"><a href="#ref5">5</a></sup> e defende que as faculdades da alma seguem o temperamento do corpo.<sup class="r"><a href="#ref6">6</a></sup></span></li>
+      <li><span class="when">1798</span><span><b>Kant.</b> Divide os temperamentos em dois do sentimento (sanguíneo e melancólico) e dois da atividade (colérico e fleumático).<sup class="r"><a href="#ref7">7</a></sup></span></li>
+      <li><span class="when">1896</span><span><b>Wundt.</b> Classifica os temperamentos pela força e pela velocidade das emoções: colérico forte e rápido, melancólico forte e lento, sanguíneo fraco e rápido, fleumático fraco e lento.<sup class="r"><a href="#ref8">8</a></sup></span></li>
+      <li><span class="when">1909</span><span><b>Steiner.</b> Em cada pessoa um dos quatro membros predomina: o eu no colérico, o corpo astral no sanguíneo, o corpo etérico no fleumático e o corpo físico no melancólico.<sup class="r"><a href="#ref9">9</a></sup></span></li>
+      <li><span class="when">1934</span><span><b>Conrad Hock.</b> Usa o conhecimento do próprio temperamento como caminho de autoconhecimento e de vida espiritual.<sup class="r"><a href="#ref10">10</a></sup></span></li>
+      <li><span class="when">1966</span><span><b>Tim LaHaye.</b> Cada pessoa tem um temperamento primário e um secundário.<sup class="r"><a href="#ref11">11</a></sup></span></li>
+      <li><span class="when">1967</span><span><b>Hans Eysenck.</b> Dispõe os quatro temperamentos num plano formado pela extroversão e pela estabilidade emocional.<sup class="r"><a href="#ref12">12</a></sup></span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="referencias">
+  <div class="wrap">
+    <p class="eyebrow">Referências</p>
+    <h2>Fontes primárias</h2>
+    <p class="lead">Só citamos a obra do próprio autor. Cada referência informa se a passagem já foi conferida. Os sites com os textos completos estavam bloqueados no ambiente desta pesquisa, por isso várias conferências ainda estão pendentes.</p>
+    <ol class="refs" id="refs"></ol>
+    <p class="note"><b>Subtipos.</b> Não encontramos fonte primária para o esquema fogo, faísca e brasa; água, vapor e gelo; terra, argila e pedra; ar, brisa e vento. Ele é uma hipótese de trabalho do projeto e a origem continua desconhecida. As descrições dos subtipos são interpretação nossa.</p>
+  </div>
+</section>
+
+<footer><div class="wrap">Morg Elements · estudo aberto sobre os quatro temperamentos.</div></footer>
+
+<script>
+const EL = {
+  fogo:{cor:'var(--fogo)'}, ar:{cor:'var(--ar)'}, agua:{cor:'var(--agua)'}, terra:{cor:'var(--terra)'}
+};
+const mix = (a,b,p=60) => `color-mix(in oklab, ${EL[a].cor} ${p}%, ${EL[b].cor})`;
+const r = n => `<sup class="r"><a href="#ref${n}">${n}</a></sup>`;
+
+const T = [
+ {id:'sanguineo', nome:'Sanguíneo', el:'ar', elNome:'Ar', eixos:['Expansivo','Não marcado'], humor:'Sangue', quali:'Quente e úmido', est:'Primavera', oposto:'Melancólico',
+  resumo:'Vive o presente. É tocado com facilidade e intensidade, mas as impressões passam rápido. Abre-se ao mundo e não guarda por muito tempo o que sentiu.',
+  age:['Puxa conversa com desconhecidos e anima o ambiente.','Promete com sinceridade no momento e pode esquecer depois.','Fica chateado e, uma hora depois, já passou.','Começa projetos com entusiasmo e se cansa quando viram rotina.'],
+  forcas:'Otimismo, sociabilidade, perdão fácil, criatividade.', atencao:'Inconstância, superficialidade, dificuldade de concluir.',
+  fontes:`Temperamento do sentimento para Kant${r(7)}; fraco e rápido para Wundt${r(8)}; corpo astral predominante para Steiner${r(9)}.`,
+  subs:[
+   {nome:'Brisa', viz:'fleumatico', vizNome:'Fleumático', vizEl:'agua', desc:'Sanguíneo suavizado. Gentil, conciliador, alegre sem barulho.', busca:'A calma e a constância do fleumático.', base:'Continua precisando de gente e de movimento. Se se acomodar demais, a leveza vira dispersão.'},
+   {nome:'Ar', desc:'O sanguíneo puro: leve, comunicativo, curioso e sempre em movimento.'},
+   {nome:'Vento', viz:'colerico', vizNome:'Colérico', vizEl:'fogo', desc:'Sanguíneo com direção e força. Lidera pelo carisma e mobiliza pessoas.', busca:'A determinação e a capacidade de realizar do colérico.', base:'Sua força é a alegria, não o domínio. Quando quer se impor, atropela os outros e perde o que tem de melhor.'}
+  ]},
+ {id:'colerico', nome:'Colérico', el:'fogo', elNome:'Fogo', eixos:['Expansivo','Marcado'], humor:'Bile amarela', quali:'Quente e seco', est:'Verão', oposto:'Fleumático',
+  resumo:'Vive para agir. Sente com força e reage rápido. Vai para fora e é atingido com intensidade pelo que encontra.',
+  age:['Assume o comando quando ninguém decide.','Fala direto, às vezes de forma dura.','Irrita-se com lentidão e incompetência.','Define uma meta e faz o que for preciso para alcançá-la.'],
+  forcas:'Liderança, coragem, iniciativa, praticidade.', atencao:'Impaciência, ira, orgulho, pouca escuta.',
+  fontes:`Temperamento da atividade, que se inflama depressa, para Kant${r(7)}; forte e rápido para Wundt${r(8)}; o eu predominante para Steiner${r(9)}.`,
+  subs:[
+   {nome:'Faísca', viz:'sanguineo', vizNome:'Sanguíneo', vizEl:'ar', desc:'Colérico mais leve e rápido. Inflama os outros com entusiasmo; é persuasivo e espontâneo.', busca:'A leveza e a simpatia do sanguíneo.', base:'Seu valor está em concluir. Sem a vontade firme, vira fogo de palha: começa tudo e termina pouco.'},
+   {nome:'Fogo', desc:'O colérico puro: decidido, prático, intenso e voltado para o resultado.'},
+   {nome:'Brasa', viz:'melancolico', vizNome:'Melancólico', vizEl:'terra', desc:'Fogo contido e duradouro. Planeja, aprofunda e exige qualidade.', busca:'A profundidade e o rigor do melancólico.', base:'Nasceu para agir. Se ficar só planejando e remoendo, o calor vira ressentimento guardado.'}
+  ]},
+ {id:'melancolico', nome:'Melancólico', el:'terra', elNome:'Terra', eixos:['Não expansivo','Marcado'], humor:'Bile negra', quali:'Frio e seco', est:'Outono', oposto:'Sanguíneo',
+  resumo:'Vive para dentro. As impressões demoram a entrar e, quando entram, ficam. Reflete muito e guarda por muito tempo o que sente.',
+  age:['Pensa antes de falar e repassa as conversas depois.','Vê primeiro os riscos e os problemas de um plano.','Demora a confiar, mas quando confia é para sempre.','Busca perfeição e sentido no que faz e sofre quando não encontra.'],
+  forcas:'Profundidade, sensibilidade, fidelidade, senso de detalhe e de beleza.', atencao:'Pessimismo, autocrítica excessiva, retraimento, rancor.',
+  fontes:`Temperamento do sentimento, que leva tudo a sério, para Kant${r(7)}; forte e lento para Wundt${r(8)}; ligado a pessoas de destaque nos <i>Problemas</i>${r(4)}; corpo físico predominante para Steiner${r(9)}.`,
+  subs:[
+   {nome:'Pedra', viz:'colerico', vizNome:'Colérico', vizEl:'fogo', desc:'Firme, exigente e persistente. Transforma reflexão em ação.', busca:'A força de decisão do colérico.', base:'A sensibilidade é o seu centro. Endurecido demais, fica frio, crítico e inflexível.'},
+   {nome:'Terra', desc:'O melancólico puro: profundo, reflexivo, fiel e idealista.'},
+   {nome:'Argila', viz:'fleumatico', vizNome:'Fleumático', vizEl:'agua', desc:'Moldável, gentil e pacífico.', busca:'A paz e a leveza do fleumático: não carregar tudo tão a fundo.', base:'Continua sendo um melancólico: sente fundo e guarda o que sente. Fingir indiferença só empurra a tristeza para baixo. Precisa dar nome ao que sente.'}
+  ]},
+ {id:'fleumatico', nome:'Fleumático', el:'agua', elNome:'Água', eixos:['Não expansivo','Não marcado'], humor:'Fleuma', quali:'Frio e úmido', est:'Inverno', oposto:'Colérico',
+  resumo:'Vive em equilíbrio. Demora a se mover, mas é constante. Não se impõe e não se abala com facilidade.',
+  age:['Mantém a calma quando todos se agitam.','Ouve mais do que fala e solta comentários de humor seco.','Evita conflitos e cede para manter a paz.','Adia decisões e resiste em silêncio quando pressionado.'],
+  forcas:'Paciência, estabilidade, diplomacia, confiabilidade.', atencao:'Indolência, indecisão, teimosia passiva, falta de entusiasmo.',
+  fontes:`Temperamento da atividade, lento para se mover mas persistente, para Kant${r(7)}; fraco e lento para Wundt${r(8)}; corpo etérico predominante para Steiner${r(9)}.`,
+  subs:[
+   {nome:'Gelo', viz:'melancolico', vizNome:'Melancólico', vizEl:'terra', desc:'Mais rígido do que o fleumático costuma ser. Reservado, metódico e teimoso.', busca:'A ordem e a profundidade do melancólico.', base:'Sua natureza é fluir. Congelado, fecha-se e fica frio com os outros.'},
+   {nome:'Água', desc:'O fleumático puro: sereno, paciente e adaptável.'},
+   {nome:'Vapor', viz:'sanguineo', vizNome:'Sanguíneo', vizEl:'ar', desc:'Calma que se expande. Mais sociável, bem-humorado e leve.', busca:'A expansão e a alegria do sanguíneo.', base:'Sua força é a estabilidade. Espalhado demais, evapora e some das responsabilidades.'}
+  ]}
+];
+
+const REFS = [
+ ['EMPÉDOCLES. Fragmento 31 B6. In: DIELS, H.; KRANZ, W. (ed.). <i>Die Fragmente der Vorsokratiker</i>. 6. ed. Berlin: Weidmann, 1951. v. 1.','As quatro raízes','no','Não conferida'],
+ ['HIPÓCRATES (Corpus Hippocraticum). <i>Da natureza do homem</i>, cap. 4 e 7. In: <i>Hippocrates</i>, v. IV. Ed. e trad. W. H. S. Jones. Loeb Classical Library 150. Cambridge, MA: Harvard University Press, 1931.','Os quatro humores e as estações','part','Edição localizada; passagens não conferidas'],
+ ['ARISTÓTELES. <i>Da geração e da corrupção</i>, II.3–4, 330a30–331b4 (Bekker).','Qualidades dos elementos; vizinhos e ciclo','ok','Conferida por busca'],
+ ['ARISTÓTELES (atrib.). <i>Problemas</i>, XXX.1, 953a10 ss.','Melancolia e pessoas de destaque','no','Não conferida'],
+ ['GALENO. <i>De temperamentis</i>, livro I. In: KÜHN, C. G. (ed.). <i>Claudii Galeni opera omnia</i>. Leipzig: Cnobloch, 1821. v. I, p. 509–694.','Nove misturas; humores e qualidades','no','Não conferida'],
+ ['GALENO. <i>Quod animi mores corporis temperamenta sequantur</i>. In: KÜHN, C. G. (ed.). <i>Claudii Galeni opera omnia</i>. Leipzig: Cnobloch, 1822. v. IV, p. 767–822.','A alma segue o temperamento do corpo','no','Não conferida'],
+ ['KANT, I. <i>Anthropologie in pragmatischer Hinsicht</i> (1798), "Vom Temperament". In: <i>Kants gesammelte Schriften</i> (Akademie-Ausgabe), v. VII. Berlin: Reimer, 1907. p. 286–291.','Sentimento × atividade; opostos; recusa de compostos','part','Divisão conferida por busca; trecho sobre compostos pendente'],
+ ['WUNDT, W. <i>Grundriss der Psychologie</i>. Leipzig: Engelmann, 1896. Seção sobre os afetos e os temperamentos. Trad. ingl.: <i>Outlines of Psychology</i>, trad. C. H. Judd, 1897.','Força × velocidade das emoções','no','Não conferida; parágrafo a confirmar'],
+ ['STEINER, R. <i>Die vier Temperamente</i>. Conferência, Berlim, 4 mar. 1909. In: <i>Wo und wie findet man den Geist?</i> (GA 57).','Membro predominante em cada temperamento','part','Parcialmente conferida por busca'],
+ ['HOCK, C. <i>Die vier Temperamente</i>. 5. ed. Trad. ingl.: <i>The Four Temperaments</i>. Milwaukee: Bruce, 1934.','Temperamento e autoconhecimento','part','Edição conferida em catálogo; conteúdo pendente'],
+ ['LAHAYE, T. <i>Spirit-Controlled Temperament</i>. Wheaton, IL: Tyndale House, 1966.','Temperamento primário e secundário','no','Não conferida'],
+ ['EYSENCK, H. J. <i>The Biological Basis of Personality</i>. Springfield, IL: Charles C. Thomas, 1967.','Extroversão × estabilidade emocional','no','Não conferida']
+];
+
+/* ---------- Cards ---------- */
+const cols = document.getElementById('cols'), jump = document.getElementById('jump');
+const subId = (t,s) => `${t.id}-${s.nome.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()}`;
+T.forEach(t=>{
+  const c = EL[t.el].cor;
+  jump.insertAdjacentHTML('beforeend', `<a href="#${t.id}" style="--c:${c}"><i></i>${t.nome}</a>`);
+  const subs = t.subs.map(s=>{
+    const sc = s.viz ? mix(t.el, s.vizEl, 62) : c;
+    return `<div class="sub" id="${subId(t,s)}" style="--sc:${sc}">
+      <div class="sh"><strong>${s.nome}</strong><small>${s.viz ? 'perto do '+s.vizNome : 'neutro, no centro'}</small></div>
+      <p>${s.desc}</p>
+      ${s.viz ? `<dl><div><dt>Busca: </dt><dd>${s.busca}</dd></div><div><dt>Lembrar da base: </dt><dd>${s.base}</dd></div></dl>` : ''}
+    </div>`;
+  }).join('');
+  cols.insertAdjacentHTML('beforeend', `<article class="card" id="${t.id}" style="--c:${c}">
+    <div class="top">
+      <div class="el">${t.elNome}</div>
+      <h3>${t.nome}</h3>
+      <div class="chips">${t.eixos.map(e=>`<span>${e}</span>`).join('')}</div>
+    </div>
+    <div class="body">
+      <p>${t.resumo}</p>
+      <div class="fa"><b>Humor</b><span>${t.humor}${r(2)}</span><b>Qualidades</b><span>${t.quali}${r(3)}</span><b>Estação</b><span>${t.est}${r(2)}</span></div>
+      <div><h4>Como costuma agir</h4><ul>${t.age.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+      <div class="fa"><b>Forças</b><span>${t.forcas}</span><b>Atenção</b><span>${t.atencao}</span></div>
+      <p class="src">${t.fontes}</p>
+      <div><h4>Subtipos</h4><div class="subs" style="margin-top:8px">${subs}</div></div>
+      <p class="opp">Oposto na diagonal: <b>${t.oposto}</b>. Não há subtipo nessa direção.</p>
+    </div>
+  </article>`);
+});
+
+/* ---------- References ---------- */
+document.getElementById('refs').innerHTML = REFS.map((x,i)=>
+  `<li id="ref${i+1}"><span class="n">${i+1}</span><span>${x[0]}<span class="use">Uso: ${x[1]}</span><span class="pill ${x[2]}">${x[3]}</span></span></li>`).join('');
+
+/* ---------- Circle ---------- */
+const NS='http://www.w3.org/2000/svg';
+const P = (rad,deg)=>{const a=deg*Math.PI/180;return [rad*Math.sin(a), -rad*Math.cos(a)]};
+const R_OUT=206, R_IN=128;
+const el = (tag, attrs, parent)=>{const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);parent&&parent.appendChild(n);return n};
+const annulus=(a0,a1,r0,r1)=>{const [x0,y0]=P(r1,a0),[x1,y1]=P(r1,a1),[x2,y2]=P(r0,a1),[x3,y3]=P(r0,a0);
+  return `M${x0},${y0}A${r1},${r1} 0 0 1 ${x1},${y1}L${x2},${y2}A${r0},${r0} 0 0 0 ${x3},${y3}Z`};
+const wedge=(a0,a1,rr)=>{const [x0,y0]=P(rr,a0),[x1,y1]=P(rr,a1);return `M0,0L${x0},${y0}A${rr},${rr} 0 0 1 ${x1},${y1}Z`};
+
+// Quadrants clockwise from top: colérico 0–90, melancólico 90–180, fleumático 180–270, sanguíneo 270–360
+const Q = [
+  {t:T[1], a:0,   order:['Faísca','Fogo','Brasa']},
+  {t:T[2], a:90,  order:['Pedra','Terra','Argila']},
+  {t:T[3], a:180, order:['Gelo','Água','Vapor']},
+  {t:T[0], a:270, order:['Brisa','Ar','Vento']}
+];
+const gCore=document.getElementById('g-core'), gSec=document.getElementById('g-sectors'),
+      gLines=document.getElementById('g-lines'), gLab=document.getElementById('g-labels');
+
+Q.forEach((q,qi)=>{
+  const c=EL[q.t.el].cor;
+  const core = el('path',{d:wedge(q.a,q.a+90,R_IN), class:'grow', style:`fill:color-mix(in oklab, ${c} 22%, var(--bg));--d:${2.3+qi*.15}s`},gCore);
+  const [tx,ty]=P(80,q.a+45);
+  const lab=el('g',{class:'fade',style:`--d:${4.6+qi*.12}s`},gLab);
+  el('text',{x:tx,y:ty-2,'text-anchor':'middle',class:'tname'},lab).textContent=q.t.nome;
+  el('text',{x:tx,y:ty+15,'text-anchor':'middle',class:'tel'},lab).textContent=q.t.elNome;
+
+  q.order.forEach((nm,si)=>{
+    const s=q.t.subs.find(x=>x.nome===nm);
+    const a0=q.a+si*30, a1=a0+30;
+    const fill = s.viz ? mix(q.t.el,s.vizEl,62) : c;
+    const p=el('path',{d:annulus(a0,a1,R_IN,R_OUT),class:'sector fade',tabindex:'0',role:'link',
+      'aria-label':`${s.nome}, ${q.t.nome}${s.viz?' perto do '+s.vizNome:' neutro'}`,
+      style:`fill:${fill};--d:${3.0+qi*.25+si*.08}s`},gSec);
+    const go=()=>{const target=document.getElementById(subId(q.t,s));target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
+      target.classList.add('hl');setTimeout(()=>target.classList.remove('hl'),1800)};
+    p.addEventListener('click',go);
+    p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+    const [lx,ly]=P((R_IN+R_OUT)/2,a0+15);
+    el('text',{x:lx,y:ly+4.5,'text-anchor':'middle',class:'sub fade','pointer-events':'none',
+      style:`fill:var(--on);--d:${4.1+qi*.2+si*.1}s`},gLab).textContent=nm;
+  });
+});
+
+// Sector dividers (between subtypes)
+for(let a=0;a<360;a+=30){ if(a%90===0) continue;
+  const [x0,y0]=P(R_IN,a),[x1,y1]=P(R_OUT,a);
+  el('line',{x1:x0,y1:y0,x2:x1,y2:y1,class:'div draw',pathLength:1,style:`--d:${3.6+a/360*.6}s;--t:.6s`},gLines);
+}
+// Rings
+el('circle',{r:R_OUT,class:'ring draw',pathLength:1,transform:'rotate(-90)',style:'--d:.1s;--t:1.8s'},gLines);
+el('circle',{r:R_IN,class:'ring draw',pathLength:1,transform:'rotate(-90)',style:'--d:1.7s;--t:1.2s;stroke-width:1.1'},gLines);
+// Axes
+el('line',{x1:0,y1:-238,x2:0,y2:238,class:'axis draw',pathLength:1,style:'--d:1.2s;--t:1.1s'},gLines);
+el('line',{x1:-238,y1:0,x2:238,y2:0,class:'axis draw',pathLength:1,style:'--d:1.4s;--t:1.1s'},gLines);
+// Axis labels
+const ax=[['Expansivos',0,-252,0],['Não expansivos',0,262,0],['Marcados',252,0,90],['Não marcados',-252,0,-90]];
+ax.forEach(([t,x,y,rot],i)=>{
+  el('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',class:'axl fade',transform:`rotate(${rot} ${x} ${y})`,style:`--d:${5.2+i*.15}s`},gLab).textContent=t;
+});
+
+const svg=document.getElementById('circle');
+const play=()=>{svg.classList.remove('play');void svg.getBoundingClientRect();svg.classList.add('play')};
+play();
+document.getElementById('replay').addEventListener('click',()=>{svg.scrollIntoView({behavior:'smooth',block:'center'});play()});
+</script>
