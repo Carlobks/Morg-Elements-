@@ -1,0 +1,58 @@
+# CI (adaptado do modelo do Morg-laws, modelos/github/workflows/ci.yml): os testes estáticos e os do navegador numa
+# máquina limpa, e o gitleaks em todo o histórico. Pega o commit feito à mão sem os hooks do git.
+# Regras do modelo: actions fixadas por SHA com a versão em comentário; o token só lê; versões fixas, as mesmas da
+# máquina de quem desenvolve; o gitleaks baixado com o sha256 conferido, sem action de terceiros.
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # Histórico inteiro: o teste de referência monta a versão a1e33ad com git archive.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        id: python
+        with:
+          python-version: "3.13.18"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - name: Dependências do lockfile e npm audit
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm audit --audit-level=high
+      - name: Testes estáticos (os mesmos do pre-commit)
+        env:
+          MORG_PY: ${{ steps.python.outputs.python-path }}
+        run: sh scripts/testar.sh
+      - name: Navegador do Playwright (a versão do lockfile)
+        run: npx playwright install --with-deps chromium
+      - name: Testes do navegador (os mesmos do pre-push)
+        run: npm test
+
+  segredos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: gitleaks 8.30.1 em todo o histórico
+        run: |
+          curl -sSfL -o gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks git --redact --no-banner .

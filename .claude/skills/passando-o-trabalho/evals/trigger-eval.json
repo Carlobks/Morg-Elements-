@@ -1,0 +1,16 @@
+[
+  {"query": "a conversa já está enorme, prepara tudo para eu compactar", "should_trigger": true},
+  {"query": "vou continuar amanhã em outra sessão, deixa o trabalho preparado", "should_trigger": true},
+  {"query": "acabei de compactar, lê o handoff e continua de onde paramos", "should_trigger": true},
+  {"query": "a conversa está enorme: compacto ou abro uma sessão nova?", "should_trigger": true},
+  {"query": "estou no Codex e a janela está quase cheia, o que faço antes de compactar?", "should_trigger": true},
+  {"query": "guarda o que já tentamos e não funcionou, para a próxima sessão não repetir", "should_trigger": true},
+  {"query": "vou almoçar, deixa isto preparado", "should_trigger": true},
+  {"query": "vou sair por duas horas, deixa o trabalho guardado para eu voltar", "should_trigger": true},
+  {"query": "acabou o expediente, deixa o handoff pronto para amanhã e eu fecho a sessão", "should_trigger": true},
+  {"query": "é fim do dia: devo compactar esta conversa ou só parar e retomar amanhã?", "should_trigger": true},
+  {"query": "abre uma sessão nova para revisar este plano sem saber o que eu acho", "should_trigger": false},
+  {"query": "escreve a mensagem de commit desta correção", "should_trigger": false},
+  {"query": "resume este PDF em meia página", "should_trigger": false},
+  {"query": "escreve o changelog desta versão", "should_trigger": false}
+]

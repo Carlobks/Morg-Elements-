@@ -1,0 +1,119 @@
+<title>Morg Elements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="estilo.css">
+
+<header class="hero">
+  <div class="wrap">
+    <h1 class="brand">Morg Elements</h1>
+    <p class="temps"><span style="--c:var(--ar)">Sanguíneo</span><i aria-hidden="true">·</i><span style="--c:var(--fogo)">Colérico</span><i aria-hidden="true">·</i><span style="--c:var(--terra)">Melancólico</span><i aria-hidden="true">·</i><span style="--c:var(--agua)">Fleumático</span></p>
+    <p class="warn"><strong>Nada aqui deve ser levado como verdade.</strong> É um estudo de uma tradição antiga, não ciência.</p>
+  </div>
+</header>
+
+<div class="wrap stage">
+  <svg id="circle" viewBox="-276 -278 552 556" role="img" aria-labelledby="ctitle">
+    <title id="ctitle">Círculo dos temperamentos: sanguíneo (ar) em cima à esquerda, colérico (fogo) em cima à direita, melancólico (terra) embaixo à direita, fleumático (água) embaixo à esquerda. Em cima ficam os expansivos, à direita os marcados.</title>
+    <g id="rot">
+      <g id="g-core"></g>
+      <g id="g-sectors"></g>
+      <g id="g-lines"></g>
+      <g id="g-labels"></g>
+      <path id="selpath" d=""/>
+    </g>
+    <path id="pointer" d="M222,0L246,-13L246,13Z"/>
+  </svg>
+  <p class="legend">Toque num subtipo para abrir a explicação dele. Cada elemento tem um centro neutro e muda de forma ao se aproximar de um vizinho.</p>
+  <button class="btn" id="replay" type="button">Rever a animação</button>
+</div>
+
+
+<div class="wrap tgl">
+  <div class="tbtns">
+    <button class="tg" type="button" data-p="eixos" aria-expanded="false" aria-controls="p-eixos"><span class="k">Como ler o círculo</span><span class="t">Os eixos</span></button>
+    <button class="tg" type="button" data-p="fontes" aria-expanded="false" aria-controls="p-fontes"><span class="k">Origem e referências</span><span class="t">As fontes</span></button>
+  </div>
+</div>
+<div class="tpanel" id="p-eixos" hidden>
+<section id="leitura">
+  <div class="wrap">
+    <p class="eyebrow">Como ler o círculo</p>
+    <h2>Os eixos nas fontes</h2>
+    <div class="prose">
+      <p>Em cima ficam os <b>expansivos</b> e embaixo os <b>não expansivos</b>. À direita ficam os <b>marcados</b>, que sentem forte e guardam o que sentem, e à esquerda os <b>não marcados</b>. Autores diferentes chegaram a divisões muito parecidas.</p>
+    </div>
+    <div class="tblw">
+      <table>
+        <thead><tr><th>Fonte</th><th>Cima × baixo</th><th>Direita × esquerda</th><th>Diagonais</th></tr></thead>
+        <tbody>
+          <tr><td>Wundt<sup class="r"><a href="#ref8">8</a></sup></td><td>Rápidos × lentos</td><td>Fortes × fracos</td><td>—</td></tr>
+          <tr><td>Kant<sup class="r"><a href="#ref7">7</a></sup></td><td>—</td><td>—</td><td>Sentimento (sanguíneo × melancólico) e atividade (colérico × fleumático), opostos dentro de cada par</td></tr>
+          <tr><td>Eysenck<sup class="r"><a href="#ref12">12</a></sup></td><td>Extrovertidos × introvertidos</td><td>Instáveis × estáveis</td><td>—</td></tr>
+          <tr><td>Aristóteles<sup class="r"><a href="#ref3">3</a></sup></td><td>Quente (ar, fogo) × frio (água, terra)</td><td>Seco (fogo, terra) × úmido (ar, água)</td><td>Contrários: fogo × água, ar × terra</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A linha de Aristóteles na tabela é uma correspondência que nós observamos. Ele descreve as qualidades dos elementos, não temperamentos de pessoas.</p>
+
+    <div class="prose" style="margin-top:28px">
+      <h3 style="font-size:1.5rem">Por que os subtipos olham para os vizinhos</h3>
+      <p>Para Aristóteles, elementos vizinhos compartilham uma qualidade e passam um ao outro com facilidade. A água vira ar quando o frio dá lugar ao quente, e por isso a geração dos elementos forma um ciclo. Elementos sem nada em comum mudam com mais dificuldade.<sup class="r"><a href="#ref3">3</a></sup> O vapor é água puxada pelo calor do ar, e o gelo é água dominada pelo frio da terra.</p>
+      <p>Por isso não existe subtipo na direção do oposto. Kant afirma que temperamentos opostos não se somam, apenas se anulam, e ele nem aceita temperamentos compostos.<sup class="r"><a href="#ref7">7</a></sup> Galeno, com suas misturas,<sup class="r"><a href="#ref5">5</a></sup> Steiner, com a ideia de um temperamento que predomina e dá o tom aos outros,<sup class="r"><a href="#ref9">9</a></sup> e LaHaye, com o temperamento primário e o secundário,<sup class="r"><a href="#ref11">11</a></sup> ficam mais perto da ideia de subtipos.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+<div class="tpanel" id="p-fontes" hidden>
+<section id="origem">
+  <div class="wrap">
+    <p class="eyebrow">Origem das ideias</p>
+    <h2>De Empédocles a Eysenck</h2>
+    <ol class="timeline">
+      <li><span class="when">c. 450 a.C.</span><span><b>Empédocles.</b> Fogo, ar, água e terra são as quatro raízes de todas as coisas.<sup class="r"><a href="#ref1">1</a></sup></span></li>
+      <li><span class="when">c. 400 a.C.</span><span><b><i>Da natureza do homem</i></b> (Corpus Hippocraticum). O corpo tem sangue, fleuma, bile amarela e bile negra, e a saúde depende da boa mistura entre eles. Cada humor cresce numa estação: a fleuma no inverno, o sangue na primavera, a bile amarela no verão e a bile negra no outono.<sup class="r"><a href="#ref2">2</a></sup></span></li>
+      <li><span class="when">séc. IV a.C.</span><span><b>Aristóteles.</b> Cada elemento tem duas qualidades e os vizinhos se transformam em ciclo.<sup class="r"><a href="#ref3">3</a></sup> Nos <i>Problemas</i> atribuídos a ele, a melancolia aparece ligada a pessoas de destaque na filosofia, na política e nas artes.<sup class="r"><a href="#ref4">4</a></sup></span></li>
+      <li><span class="when">séc. II d.C.</span><span><b>Galeno.</b> Descreve nove misturas de quente, frio, seco e úmido<sup class="r"><a href="#ref5">5</a></sup> e defende que as faculdades da alma seguem o temperamento do corpo.<sup class="r"><a href="#ref6">6</a></sup></span></li>
+      <li><span class="when">1798</span><span><b>Kant.</b> Divide os temperamentos em dois do sentimento (sanguíneo e melancólico) e dois da atividade (colérico e fleumático).<sup class="r"><a href="#ref7">7</a></sup></span></li>
+      <li><span class="when">1896</span><span><b>Wundt.</b> Classifica os temperamentos pela força e pela velocidade das emoções: colérico forte e rápido, melancólico forte e lento, sanguíneo fraco e rápido, fleumático fraco e lento.<sup class="r"><a href="#ref8">8</a></sup></span></li>
+      <li><span class="when">1909</span><span><b>Steiner.</b> Em cada pessoa um dos quatro membros predomina: o eu no colérico, o corpo astral no sanguíneo, o corpo etérico no fleumático e o corpo físico no melancólico.<sup class="r"><a href="#ref9">9</a></sup></span></li>
+      <li><span class="when">1934</span><span><b>Conrad Hock.</b> Usa o conhecimento do próprio temperamento como caminho de autoconhecimento e de vida espiritual.<sup class="r"><a href="#ref10">10</a></sup></span></li>
+      <li><span class="when">1966</span><span><b>Tim LaHaye.</b> Cada pessoa tem um temperamento primário e um secundário.<sup class="r"><a href="#ref11">11</a></sup></span></li>
+      <li><span class="when">1967</span><span><b>Hans Eysenck.</b> Dispõe os quatro temperamentos num plano formado pela extroversão e pela estabilidade emocional.<sup class="r"><a href="#ref12">12</a></sup></span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="referencias">
+  <div class="wrap">
+    <p class="eyebrow">Referências</p>
+    <h2>Fontes primárias</h2>
+    <p class="lead">Só citamos a obra do próprio autor. Cada referência informa se a passagem já foi conferida. Os sites com os textos completos estavam bloqueados no ambiente desta pesquisa, por isso várias conferências ainda estão pendentes.</p>
+    <ol class="refs" id="refs"></ol>
+    <p class="note"><b>Subtipos.</b> Não encontramos fonte primária para o esquema fogo, faísca e brasa; água, vapor e gelo; terra, argila e pedra; ar, brisa e vento. Ele é uma hipótese de trabalho do projeto e a origem continua desconhecida. As descrições dos subtipos são interpretação nossa.</p>
+  </div>
+</section>
+
+</div>
+
+<div id="focus" hidden>
+  <div id="fcirc" aria-label="Círculo: deslize para cima ou para baixo para trocar de subtipo, para a direita para voltar">
+    <canvas id="colfx" aria-hidden="true"></canvas>
+    <button class="fback" id="back" type="button" aria-label="Voltar ao círculo"><span class="arr" aria-hidden="true">←</span><span>Voltar</span></button>
+    <p class="fhint" id="hint"></p>
+  </div>
+  <div id="fpanel">
+    <p class="sr" id="fsr" aria-live="polite"></p>
+    <div class="cols" id="cols"></div>
+    <div class="fintro"><p class="eyebrow">Os quatro elementos</p><h2>Os temperamentos e seus subtipos</h2><p class="lead">Cada temperamento tem uma base e três formas. A do centro é neutra e as outras duas se inclinam para um vizinho. O subtipo deseja algo do vizinho, mas a pessoa precisa lembrar sempre da sua base.</p></div>
+  </div>
+</div>
+
+<footer><div class="wrap">Morg Elements · estudo aberto sobre os quatro temperamentos.</div></footer>
+
+<script src="dados.js"></script>
+<script src="efeitos.js"></script>
+<script src="navegacao.js"></script>

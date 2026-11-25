@@ -1,0 +1,11 @@
+{
+  "name": "morg-elements",
+  "private": true,
+  "description": "Testes da página Morg Elements. A página não depende de nada daqui.",
+  "scripts": {
+    "test": "playwright test --trace off"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
