@@ -3,7 +3,7 @@
 ## Objetivo
 
 Auditar o projeto, guardar os testes e pôr as barreiras do Morg-laws, sem mudar visual, texto nem organização do texto.
-Passo em curso: F0, F1 e F2 feitos; próximo, F3 (barreiras), que ainda pede o «sim» do dono. Plano: `docs/planos/0001-auditoria.md`.
+Passo em curso: F0 a F3 feitos; próximo, F4 (auditoria do código), que pede o «sim» do dono. Plano: `docs/planos/0001-auditoria.md`.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
@@ -18,8 +18,21 @@ Referência visual: `a1e33ad` (versão 10 do artifact https://claude.ai/artifact
 | `navegacao.js` | limpo | 95 linhas: `SEQ`, `show`, `enter`, `leave`, `stepBy`, gestos, `openPanel`, `goRef`. |
 | `docs/planos/0001-auditoria.md` | alterado (vai neste commit) | F0, F1, F2 marcados; nova seção «Para depois da auditoria». |
 | `package.json`, `playwright.config.js`, `tests/e2e/*` | limpo | Os testes do F1 (ver o plano). |
+| `.githooks/` | limpo | F3 (`85ffc2d`): pre-commit (lista negra, `scripts/testar.sh`; identidade comentada), commit-msg (`tipo(área): …`), pre-push (`testar.sh`, `npm test`, gitleaks, npm audit). Ligado com `git config core.hooksPath .githooks` (config local: refazer em cada clone). |
+| `scripts/portoes/`, `scripts/testar.sh` | limpo | Portões do Morg-laws sem mudança; `testar.sh` roda `tests/test_*.py` (15 testes, ~0,1 s). |
+| `tests/test_*.py`, `tests/carregar_por_caminho.py` | limpo | Dados pessoais, tamanho (≤500 linhas, sem linha de base), fins de linha, planos e handoffs. |
+| `.github/workflows/ci.yml` | limpo | Testes estáticos, Playwright e gitleaks; actions por SHA; `fetch-depth: 0`. |
+| `.gitattributes`, `.nvmrc` | limpo | `* text=auto eol=lf`; Node 22.23.5. |
 
 Prova do F2: os cinco arquivos juntados de volta (com `<style>`/`<script>` no lugar) = `index.html` antigo, `diff` vazio; `T`, `SUB`, `REFS` idênticos. `npm test` → `8 passed (58.1s)`. Sem `dados.js`, os testes ficam vermelhos (timeout no clique), então eles leem os arquivos novos.
+
+Sondas do F3 (numa cópia descartável): recusados no commit o e-mail pessoal, o caminho `/home/<conta>`, o arquivo de 501 linhas (500 passa), o CRLF, o hash inexistente no handoff e a mensagem fora do formato; recusado no push um token `ghp_` falso (`leaks found: 1`). gitleaks 8.30.1 em todo o histórico: `no leaks found`. Instalado em `~/.local/bin` (sha256 conferido); numa sessão nova, reinstalar.
+
+Teste intermitente: o pre-push do F3 falhou uma vez e o `npm test` seguinte também, só `[pc-claro] igual à referência`:
+```
+"inicio: 604 px", "foco-Faísca: 335 px", … "painel-fontes: 389 px"
+```
+Isolado (3×) e em 5 rodadas inteiras depois, passou. Causa não achada; vai para o F4.
 
 ## Decisões e porquê
 
@@ -28,6 +41,9 @@ Prova do F2: os cinco arquivos juntados de volta (com `<style>`/`<script>` no lu
 - Do dono: pedidos visuais anotados para depois da auditoria (plano, seção «Para depois da auditoria»): botão de tema, mudar o lugar do «Rever a animação», o texto abaixo do círculo não explica que ele é tocável, e fechar os painéis faz a página subir de forma abrupta. Nada disso se faz antes do fim da auditoria nem sem o «sim».
 - Técnica: comparação de pixels exige quadro determinístico (movimento reduzido emulado e `Math.random` com semente via `addInitScript`); o teste espera `document.fonts` antes de cada print. Limite: só o quadro parado é comparado.
 - O CI do F3 vai precisar de `fetch-depth: 0` para o `git archive a1e33ad`.
+- Do dono (F3): o portão de identidade e a lista negra ficam para quando o repositório estiver na máquina dele. Até lá o `identidade.py` está comentado no pre-commit e a lista negra só avisa.
+- Do dono: no fim do plano, o projeto fica público com uma release (plano, seção «Depois do plano»): ver o que falta criar, um README bonito e cuidado com os dados pessoais.
+- Técnica (F3): o tamanho dos arquivos sem linha de base (nenhum arquivo passa de 500 linhas); dos testes de docs, só planos e handoffs (o projeto não tem `docs/README.md`).
 - Regras que continuam: repositório público, nada pessoal; só fontes primárias; nada se altera sem o «sim» do dono.
 
 ## Descartado
@@ -40,5 +56,6 @@ Prova do F2: os cinco arquivos juntados de volta (com `<style>`/`<script>` no lu
 
 ## Próximos passos
 
-1. Pedir o «sim» do dono para o F3 (barreiras: `.githooks/`, `scripts/portoes/`, testes Python, `.github/workflows/ci.yml` com `fetch-depth: 0`), modelos em `../carlobks/morg-laws/modelos/` (clone só leitura; reclonar se a sessão for nova).
-2. F4 a F7 conforme o plano.
+1. Conferir o CI do commit `cb48ea8` no GitHub (Actions, workflow CI): os jobs `testar` e `segredos` verdes. No `85ffc2d`, o `segredos` passou e o `testar` falhou no Python 3.11.9, que não existe para o Ubuntu 26.04; corrigido para 3.13.18.
+2. Pedir o «sim» do dono para o F4 (auditoria do código, em partes de ~120 linhas, relatório em `docs/auditoria-2026-11-25.md`), começando pelo teste intermitente.
+3. F5 a F7 conforme o plano; depois, o plano da publicação com release.
