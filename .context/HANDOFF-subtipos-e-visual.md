@@ -3,7 +3,7 @@
 ## Objetivo
 
 Terminar a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ. O projeto termina quando a fase 3 (visual) estiver pronta.
-Passo em curso: nenhum código novo foi escrito ainda. O dono aprovou o plano das fases 2 e 3 e da revisão com a humanizer (item 1).
+Estado: fases 2 e 3 e revisão com a humanizer concluídas e publicadas (2026-11-25). O projeto está encerrado; só voltar aqui se o dono pedir ajustes.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
@@ -39,7 +39,13 @@ Testes: não há suíte. Na sessão, uma checagem com Playwright em 1300 px (cla
 - Cores dos subtipos por `color-mix` entre vizinhos: vento e faísca ficaram rosados e apagados. Usar cores próprias.
 - Texto branco fixo sobre os setores: ilegível no tema escuro. Usar o token `--on` ou um contorno.
 
-## Próximos passos
+## Feito depois deste handoff
+
+- Fase 2 (`4094219`): 12 subtipos em `const SUB`, cada um num `<details>`, tabela comparativa por temperamento, toque no círculo abre o subtipo.
+- Fase 3 (`f2566d4`): cores próprias `--s-*` nos dois temas (contraste ≥ 4,5 com `--on`), canvas por elemento no topo dos cards, ícones SVG animados, halo e brilho "respirando" por quadrante, revelação com o scroll, nomes do centro maiores (viewBox -276..276). Movimento reduzido deixa tudo parado.
+- Humanizer: negrito no meio das frases retirado de `docs/pesquisa.md`; textos novos já escritos seguindo a skill.
+
+## Próximos passos (originais, todos feitos)
 
 1. Fase 2: escrever os 12 subtipos aprofundados no `const T` de `index.html` (campos: imagem, traços, trabalho, relações, conflito, busca, exagero, base, equilíbrio), com o `<details>` e a tabela comparativa. Escrever já seguindo `.claude/skills/humanizer/SKILL.md`.
 2. Fase 3: o visual descrito nas Decisões. Depois, um único print com Playwright (400 px escuro e 1300 px claro).
