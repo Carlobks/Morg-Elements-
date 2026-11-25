@@ -3,7 +3,7 @@
 ## Objetivo
 
 Auditar o projeto, guardar os testes e pôr as barreiras do Morg-laws, sem mudar visual, texto nem organização do texto.
-Passo em curso: F0 e F1 feitos; próximo, F2 (dividir o arquivo), com o «sim» do dono. Plano: `docs/planos/0001-auditoria.md`.
+Passo em curso: F0 e F1 feitos; próximo, F2 (dividir o arquivo); o dono já deu o «sim» para o F2. Plano: `docs/planos/0001-auditoria.md`.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
@@ -40,5 +40,5 @@ Testes: `npm test` → `8 passed (50.8s)`. Quebras de propósito: gesto invertid
 
 ## Próximos passos
 
-1. F2: dividir `index.html` em `index.html`, `estilo.css`, `dados.js`, `efeitos.js`, `navegacao.js` (<500 linhas cada), lendo em partes pequenas; prova: `npm test` verde e dados idênticos por `diff`. Só com o «sim» do dono.
+1. F2: dividir `index.html` em `index.html`, `estilo.css`, `dados.js`, `efeitos.js`, `navegacao.js` (<500 linhas cada), lendo em partes pequenas; prova: `npm test` verde e dados idênticos por `diff`. «Sim» do dono já dado.
 2. F3 e seguintes conforme o plano.
