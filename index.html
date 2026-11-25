@@ -85,13 +85,21 @@ section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.4rem)}
 .subs{display:flex;flex-direction:column;gap:10px}
 .sub{border:1px solid var(--line);border-left:4px solid var(--sc);border-radius:6px;padding:10px 12px;scroll-margin-top:16px;transition:background .4s}
 .sub.hl{background:color-mix(in oklab,var(--sc) 16%,transparent)}
+.sub summary{list-style:none;cursor:pointer;display:block;position:relative;padding-right:22px}
+.sub summary::-webkit-details-marker{display:none}
+.sub summary::after{content:"";position:absolute;right:2px;top:7px;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .25s}
+.sub[open] summary::after{transform:rotate(225deg);top:11px}
+.sub summary:focus-visible{outline:2px solid var(--sc);outline-offset:4px;border-radius:2px}
 .sub .sh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .sub .sh strong{font-family:var(--display);font-size:1.2rem;font-weight:400}
 .sub .sh small{font-size:12px;color:var(--muted);text-align:right}
-.sub p{font-size:14px;margin-top:4px}
-.sub dl{margin:8px 0 0;display:grid;gap:4px;font-size:13.5px}
-.sub dt{font-weight:600;display:inline}
-.sub dd{display:inline;margin:0}
+.sub .img{display:block;font-size:14px;margin-top:4px;font-style:italic;color:var(--muted)}
+.sub dl{margin:10px 0 2px;display:grid;gap:9px;font-size:13.5px;border-top:1px dashed var(--line);padding-top:10px}
+.sub dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sc);filter:saturate(1.2)}
+.sub dd{margin:2px 0 0}
+table.mini{min-width:0;font-size:13px;margin-top:6px}
+table.mini th,table.mini td{padding:6px 6px}
+table.mini tbody th{font-family:var(--display);font-size:14px;letter-spacing:0;text-transform:none;color:var(--fg);font-weight:400}
 .opp{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
 
 .prose{max-width:70ch;display:flex;flex-direction:column;gap:12px;margin-top:16px}
@@ -258,6 +266,148 @@ const T = [
   ]}
 ];
 
+/* Subtipos aprofundados: hipótese do projeto, sem fonte primária.
+   tc/te = versões curtas de conflito/exagero para a tabela comparativa. */
+const SUB = {
+ 'Brisa':{
+  imagem:'Ar úmido de fim de tarde. Não derruba nada, só refresca quem passa.',
+  tracos:'Alegre sem fazer barulho. Ouve mais do que o sanguíneo comum e tem paciência para a conversa do outro. Gosta de gente, mas de pouca gente por vez.',
+  trabalho:'Vai bem onde é preciso acolher: atendimento, ensino de crianças, ou ser a pessoa que todos procuram quando o clima da equipe azeda. Rende menos com prazo apertado e cobrança dura.',
+  relacoes:'É fácil conviver com a brisa. Cede, faz rir e deixa o outro à vontade. O risco é dizer sim para não desagradar e depois sumir do compromisso.',
+  conflito:'Foge. Troca de assunto, faz uma piada, promete pensar. O problema fica sem solução e volta mais tarde.',
+  tc:'Desvia com humor e promessas.',
+  busca:'A calma e a constância do fleumático. Quer conseguir ficar num lugar e terminar o que começou sem precisar de estímulo novo a cada hora.',
+  exagero:'Acomodada, perde o que tinha de vivo. Fica sem rumo, deixa as coisas pela metade e chama isso de leveza.',
+  te:'Dispersa e acomodada.',
+  base:'Continua precisando de gente e de movimento. A calma que ela procura serve de descanso; se tentar morar nela, apaga.',
+  equilibrio:'Uma rotina curta e fixa, com espaço para encontros. Terminar uma coisa pequena antes de abrir a próxima.'},
+ 'Ar':{
+  imagem:'Ar em movimento livre. Está em toda parte e ninguém consegue segurar.',
+  tracos:'Curioso e falante. Repara em tudo e esquece rápido. Vive no agora e conta a própria vida como uma sequência de histórias boas.',
+  trabalho:'Brilha nos começos: vender uma ideia, abrir um evento, apresentar pessoas umas às outras. Rotina longa e trabalho solitário o desgastam.',
+  relacoes:'Faz amigos com facilidade e perdoa logo. Às vezes esquece aniversários e promessas, sem maldade nenhuma.',
+  conflito:'Fala o que pensa na hora, às vezes alto, e esquece em uma hora. Estranha quando o outro ainda está magoado no dia seguinte.',
+  tc:'Reage na hora e esquece logo.',
+  exagero:'Fica superficial. Muda de plano, de turma e de opinião conforme o dia e não aprofunda nada.',
+  te:'Superficial e inconstante.',
+  equilibrio:'Poucos compromissos, todos à vista. Um amigo fleumático por perto ajuda mais do que muito conselho.'},
+ 'Vento':{
+  imagem:'Ar aquecido que ganha direção. Empurra barcos e espalha sementes.',
+  tracos:'Carismático e ambicioso. Junta pessoas em torno de uma ideia e quer vê-la acontecer. Pensa rápido e decide rindo.',
+  trabalho:'Lidera equipes, vende, organiza mutirões. É ótimo para tirar um projeto do papel e precisa de alguém que cuide dos detalhes depois.',
+  relacoes:'Contagia, mas ocupa espaço. Os amigos se divertem com ele e às vezes se cansam de seguir os planos dele.',
+  conflito:'Enfrenta e tenta convencer. Quando não consegue, aumenta o tom. Para ele passa rápido; para o outro, nem sempre.',
+  tc:'Enfrenta e tenta convencer.',
+  busca:'A determinação do colérico e a capacidade de levar uma coisa até o fim.',
+  exagero:'Vira ventania. Atropela quem pensa diferente, manda em vez de animar e se irrita quando ninguém o segue.',
+  te:'Atropela e manda.',
+  base:'A força dele é a alegria. Quando tenta se impor pelo domínio, perde o que tem de melhor.',
+  equilibrio:'Perguntar antes de decidir pelos outros. Medir o sucesso também pelo estado de quem foi junto.'},
+ 'Faísca':{
+  imagem:'A centelha que pula do fogo e acende o que estiver perto.',
+  tracos:'Entusiasmado e persuasivo. Tem a vontade do colérico com a simpatia do sanguíneo. Começa rápido e espera que todos acompanhem.',
+  trabalho:'Lança projetos, convence clientes, puxa a equipe no início. Perde o fôlego quando a tarefa fica repetitiva.',
+  relacoes:'Divertido e intenso. Provoca, desafia, esquenta a conversa. Quem convive com ele aprende que a irritação passa em minutos.',
+  conflito:'Estoura e logo depois quer fazer as pazes. Às vezes se surpreende porque o outro ainda está ferido.',
+  tc:'Estoura e logo quer fazer as pazes.',
+  busca:'A leveza e a simpatia do sanguíneo. Ser querido, e não apenas respeitado.',
+  exagero:'Fogo de palha. Abre dez frentes, termina duas e culpa os outros pelo resto.',
+  te:'Abre muitas frentes e termina poucas.',
+  base:'O valor dele está em concluir. Sem a vontade firme do fogo, começa tudo e termina pouco.',
+  equilibrio:'Uma meta por vez, levada até o fim antes de anunciar a próxima.'},
+ 'Fogo':{
+  imagem:'Chama firme que transforma o que toca. Aquece e queima com a mesma força.',
+  tracos:'Decidido e prático. Sabe o que quer e não gosta de esperar. Assume a responsabilidade sem que ninguém peça.',
+  trabalho:'Comanda, resolve crises, abre caminho onde os outros desistiram. Sofre com burocracia e com reunião que não decide nada.',
+  relacoes:'Leal e protetor com os seus. Pode parecer duro, porque diz a verdade sem enfeite e espera receber o mesmo.',
+  conflito:'Enfrenta de frente e quer ganhar. Quase nunca recua no calor da hora. Quando admite o erro, é mais tarde.',
+  tc:'Enfrenta de frente e quer ganhar.',
+  exagero:'Ira e orgulho. Passa por cima de pessoas para cumprir a meta e confunde teimosia com coragem.',
+  te:'Ira e orgulho.',
+  equilibrio:'Ouvir até o fim antes de responder. Usar a força para proteger quem está perto.'},
+ 'Brasa':{
+  imagem:'Carvão em brasa: quase sem chama, mas quente por horas.',
+  tracos:'Intenso por dentro e contido por fora. Pensa muito antes de agir e, quando age, vai fundo. Exige qualidade de si e dos outros.',
+  trabalho:'Planeja e cuida de projetos longos e difíceis. Vai bem em áreas que pedem rigor e persistência, como pesquisa, engenharia ou cirurgia.',
+  relacoes:'Fala pouco do que sente e lembra de tudo. Muito fiel, e demora a perdoar.',
+  conflito:'Não explode na hora. Guarda, analisa e volta ao assunto dias depois, com os argumentos prontos.',
+  tc:'Guarda e volta ao assunto depois.',
+  busca:'A profundidade e o rigor do melancólico.',
+  exagero:'Ressentimento. Rumina ofensas e trava diante da própria exigência.',
+  te:'Remói e guarda rancor.',
+  base:'Nasceu para agir. Se ficar só planejando e remoendo, o calor vira ressentimento guardado.',
+  equilibrio:'Pôr o plano em prática antes de ficar perfeito. Falar da raiva enquanto ela ainda é pequena.'},
+ 'Pedra':{
+  imagem:'Rocha endurecida pelo calor. Não cede, e é sobre ela que se constrói.',
+  tracos:'Firme e persistente. Reflete como melancólico e decide como colérico. Quando sabe o que é certo, não abre mão.',
+  trabalho:'Qualidade, auditoria, direito, qualquer lugar onde alguém precisa sustentar um padrão. Termina o que começa.',
+  relacoes:'Muito confiável e difícil de agradar. Mostra afeto mais por atos do que por palavras.',
+  conflito:'Argumenta com lógica e não cede. Fica frio e cortante quando acha que tem razão.',
+  tc:'Argumenta e não cede.',
+  busca:'A força de decisão do colérico.',
+  exagero:'Fica duro. Critica tudo e cobra dos outros uma perfeição que nem ele alcança.',
+  te:'Crítico e inflexível.',
+  base:'A sensibilidade é o centro dele. Endurecido demais, fica frio, crítico e inflexível.',
+  equilibrio:'Deixar a sensibilidade aparecer. Elogiar em voz alta o que está bom, além de apontar o que falta.'},
+ 'Terra':{
+  imagem:'Solo fundo e fértil. Guarda as sementes e devolve com o tempo.',
+  tracos:'Profundo e idealista. Sente com intensidade e demora a esquecer. Tem olho para o detalhe e para a beleza.',
+  trabalho:'Arte, pesquisa, escrita, trabalho de precisão. Rende muito quando está sozinho e tem tempo. Sofre com pressa e improviso.',
+  relacoes:'Poucos amigos, para a vida toda. Precisa de tempo para confiar e se magoa com descuidos que os outros nem percebem.',
+  conflito:'Recolhe-se. Sofre calado, repassa a cena muitas vezes e pode guardar a ferida por anos.',
+  tc:'Recolhe-se e sofre calado.',
+  exagero:'Pessimismo e autocrítica sem fim. Só vê o que falta e se isola.',
+  te:'Pessimista e isolado.',
+  equilibrio:'Contar a alguém o que sente antes que vire peso. Aceitar o bom o bastante de vez em quando.'},
+ 'Argila':{
+  imagem:'Terra molhada. Aceita a forma que lhe dão e, depois de seca, a guarda.',
+  tracos:'Gentil e pacífica. Sente fundo como o melancólico, mas evita mostrar. Prefere ceder a brigar.',
+  trabalho:'Cuidado, apoio, artesanato, funções de bastidor que pedem paciência e atenção. Trabalha bem numa equipe calma.',
+  relacoes:'Doce e disponível. Adapta-se ao outro com tanta facilidade que às vezes ninguém sabe o que ela quer de verdade.',
+  conflito:'Cede para manter a paz e guarda a mágoa por dentro. Mais tarde a tristeza aparece sem motivo aparente.',
+  tc:'Cede e guarda a mágoa.',
+  busca:'A paz e a leveza do fleumático: não carregar tudo tão a fundo.',
+  exagero:'Some dentro dos outros. Finge indiferença, acumula tristeza e perde a própria forma.',
+  te:'Finge indiferença e acumula tristeza.',
+  base:'Continua sendo melancólica: sente fundo e guarda o que sente. Fingir indiferença só empurra a tristeza para baixo.',
+  equilibrio:'Dar nome ao que sente e dizer em voz alta. Ter um canto só seu, com as próprias escolhas.'},
+ 'Gelo':{
+  imagem:'Água parada que o frio endureceu. Clara, firme e escorregadia.',
+  tracos:'Reservado e metódico. Tem a calma do fleumático com a ordem do melancólico. Segue as regras e espera que os outros sigam também.',
+  trabalho:'Contabilidade, arquivo, programação, manutenção: tarefas que pedem precisão e repetição sem drama.',
+  relacoes:'Distante no começo. Quem passa da superfície encontra alguém leal e constante, de poucas palavras.',
+  conflito:'Fecha-se e não muda de posição. Resiste em silêncio, às vezes por semanas.',
+  tc:'Fecha-se e resiste em silêncio.',
+  busca:'A ordem e a profundidade do melancólico.',
+  exagero:'Congela. Fica frio com as pessoas, rígido com a rotina e perdido diante do imprevisto.',
+  te:'Frio e rígido.',
+  base:'A natureza dele é fluir. Congelado, fecha-se e fica frio com os outros.',
+  equilibrio:'Aceitar pequenas mudanças de propósito. Perguntar pelas pessoas, e não só pelas tarefas.'},
+ 'Água':{
+  imagem:'Lago calmo. Reflete o que está em volta e contorna os obstáculos.',
+  tracos:'Sereno e paciente. Observa muito e fala pouco. Tem humor seco e uma calma que acalma os outros.',
+  trabalho:'Mediação, suporte, serviços que pedem constância. Mantém a cabeça fria nas crises e precisa de alguém que o tire da inércia.',
+  relacoes:'Fácil de conviver, raramente se irrita. Pode parecer indiferente quando só está esperando a vez de falar.',
+  conflito:'Evita. Cede e adia. Se pressionado, resiste em silêncio, com uma teimosia que pouca gente espera.',
+  tc:'Evita e adia.',
+  exagero:'Indolência. Deixa tudo para depois e se acomoda onde está, mesmo quando está mal.',
+  te:'Acomodado e indeciso.',
+  equilibrio:'Metas pequenas com prazo. Dizer o que pensa na reunião em vez de concordar depois.'},
+ 'Vapor':{
+  imagem:'Água aquecida que sobe e se espalha. Leve e difícil de agarrar.',
+  tracos:'Bem-humorado e sociável. Tem a paz do fleumático e uma vontade nova de estar com gente.',
+  trabalho:'Relação com clientes, recepção, trabalho em grupo sem tensão. Deixa o ambiente mais leve sem perder a calma.',
+  relacoes:'Companhia agradável e sem cobranças. Às vezes desaparece quando a amizade pede esforço.',
+  conflito:'Faz uma piada e muda de assunto. Evita o atrito ainda mais do que a água.',
+  tc:'Faz piada e muda de assunto.',
+  busca:'A expansão e a alegria do sanguíneo.',
+  exagero:'Evapora. Promete e não aparece, espalha-se em muitas companhias sem se comprometer com nenhuma.',
+  te:'Some das responsabilidades.',
+  base:'A força dele é a estabilidade. Espalhado demais, evapora e some das responsabilidades.',
+  equilibrio:'Um compromisso fixo por semana, aconteça o que acontecer. Voltar ao silêncio de vez em quando.'}
+};
+T.forEach(t=>t.subs.forEach(s=>Object.assign(s,SUB[s.nome])));
+
 const REFS = [
  ['EMPÉDOCLES. Fragmento 31 B6. In: DIELS, H.; KRANZ, W. (ed.). <i>Die Fragmente der Vorsokratiker</i>. 6. ed. Berlin: Weidmann, 1951. v. 1.','As quatro raízes','no','Não conferida'],
  ['HIPÓCRATES (Corpus Hippocraticum). <i>Da natureza do homem</i>, cap. 4 e 7. In: <i>Hippocrates</i>, v. IV. Ed. e trad. W. H. S. Jones. Loeb Classical Library 150. Cambridge, MA: Harvard University Press, 1931.','Os quatro humores e as estações','part','Edição localizada; passagens não conferidas'],
@@ -281,12 +431,16 @@ T.forEach(t=>{
   jump.insertAdjacentHTML('beforeend', `<a href="#${t.id}" style="--c:${c}"><i></i>${t.nome}</a>`);
   const subs = t.subs.map(s=>{
     const sc = s.viz ? mix(t.el, s.vizEl, 62) : c;
-    return `<div class="sub" id="${subId(t,s)}" style="--sc:${sc}">
-      <div class="sh"><strong>${s.nome}</strong><small>${s.viz ? 'perto do '+s.vizNome : 'neutro, no centro'}</small></div>
-      <p>${s.desc}</p>
-      ${s.viz ? `<dl><div><dt>Busca: </dt><dd>${s.busca}</dd></div><div><dt>Lembrar da base: </dt><dd>${s.base}</dd></div></dl>` : ''}
-    </div>`;
+    const rows = [['Traços',s.tracos],['No trabalho',s.trabalho],['Nas relações',s.relacoes],['No conflito',s.conflito],
+      ['Busca',s.busca],['Quando exagera',s.exagero],['Lembrar da base',s.base],['Equilíbrio',s.equilibrio]].filter(x=>x[1]);
+    return `<details class="sub" id="${subId(t,s)}" style="--sc:${sc}">
+      <summary><span class="sh"><strong>${s.nome}</strong><small>${s.viz ? 'perto do '+s.vizNome : 'neutro, no centro'}</small></span>
+      <span class="img">${s.imagem}</span></summary>
+      <dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
+    </details>`;
   }).join('');
+  const cmp = `<table class="mini"><thead><tr><th scope="col">Subtipo</th><th scope="col">No conflito</th><th scope="col">Quando exagera</th></tr></thead><tbody>${
+    t.subs.map(s=>`<tr><th scope="row">${s.nome}</th><td>${s.tc}</td><td>${s.te}</td></tr>`).join('')}</tbody></table>`;
   cols.insertAdjacentHTML('beforeend', `<article class="card" id="${t.id}" style="--c:${c}">
     <div class="top">
       <div class="el">${t.elNome}</div>
@@ -299,7 +453,8 @@ T.forEach(t=>{
       <div><h4>Como costuma agir</h4><ul>${t.age.map(a=>`<li>${a}</li>`).join('')}</ul></div>
       <div class="fa"><b>Forças</b><span>${t.forcas}</span><b>Atenção</b><span>${t.atencao}</span></div>
       <p class="src">${t.fontes}</p>
-      <div><h4>Subtipos</h4><div class="subs" style="margin-top:8px">${subs}</div></div>
+      <div><h4>Subtipos</h4><p class="src" style="margin-top:4px">Toque num subtipo para abrir. Hipótese do projeto, sem fonte.</p><div class="subs" style="margin-top:8px">${subs}</div></div>
+      <div><h4>Os três lado a lado</h4>${cmp}</div>
       <p class="opp">Oposto na diagonal: <b>${t.oposto}</b>. Não há subtipo nessa direção.</p>
     </div>
   </article>`);
@@ -344,7 +499,7 @@ Q.forEach((q,qi)=>{
       'aria-label':`${s.nome}, ${q.t.nome}${s.viz?' perto do '+s.vizNome:' neutro'}`,
       style:`fill:${fill};--d:${3.0+qi*.25+si*.08}s`},gSec);
     const go=()=>{const target=document.getElementById(subId(q.t,s));target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-      target.classList.add('hl');setTimeout(()=>target.classList.remove('hl'),1800)};
+      target.open=true;target.classList.add('hl');setTimeout(()=>target.classList.remove('hl'),1800)};
     p.addEventListener('click',go);
     p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
     const [lx,ly]=P((R_IN+R_OUT)/2,a0+15);
