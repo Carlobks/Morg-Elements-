@@ -54,6 +54,16 @@ MARCADOS           |
 - Os quatro humores no corpo e sua variação com as estações: *Da natureza do homem* [2].
 - Galeno liga os humores às qualidades, descreve nove misturas (*krāseis*: uma equilibrada, quatro simples e quatro compostas) [5] e defende que as faculdades da alma seguem o temperamento do corpo [6]. Os nomes dos temperamentos como tipos de caráter se firmaram depois, na tradição médica posterior; em Galeno o tema é sobretudo fisiológico.
 
+### 2.4 A terra no efeito da página
+
+O efeito da terra na coluna do círculo segue três ideias de Aristóteles:
+
+- A terra é pesada, ou seja, se move para baixo, para o centro, e afunda abaixo de todas as coisas, sem leveza nenhuma [13].
+- A terra é fria e seca [3].
+- Solidificar é uma forma de secar. O frio expulsa o calor, a umidade vai junto e o que fica se adensa. A cerâmica é feita só de terra porque endureceu aos poucos, secando [14].
+
+Por isso, no efeito, os grãos caem rápido e retos, param no pé e formam camadas, e as camadas mais antigas racham ao secar. *A tradução visual é escolha do projeto.*
+
 ## 3. Subtipos (as variações de cada elemento)
 
 > **Hipótese do projeto.** Não encontramos fonte primária para o esquema "fogo, faísca e brasa / água, vapor e gelo / terra, argila e pedra / ar, brisa e vento". O esquema está registrado aqui como hipótese de trabalho, e a origem continua desconhecida.
@@ -112,6 +122,8 @@ O conteúdo completo, com características, exemplos e subtipos, está em `index
 | 10 | HOCK, C. *Die vier Temperamente*. 5. ed. (Trad. ingl.: *The Four Temperaments*. Milwaukee: Bruce, 1934.) | Temperamento e autoconhecimento espiritual | Edição conferida por catálogo; conteúdo não conferido |
 | 11 | LAHAYE, T. *Spirit-Controlled Temperament*. Wheaton, IL: Tyndale House, 1966. | Temperamento primário e secundário (combinações) | Não conferida nesta sessão |
 | 12 | EYSENCK, H. J. *The Biological Basis of Personality*. Springfield, IL: Charles C. Thomas, 1967. | Temperamentos num plano de dois eixos (extroversão e neuroticismo) | Não conferida nesta sessão |
+| 13 | ARISTÓTELES. *Do céu* (Περὶ οὐρανοῦ), livro IV, cap. 1 e 4. (Trad. ingl.: *On the Heavens*, trad. J. L. Stocks. Oxford: Clarendon Press, 1922.) | A terra é pesada, desce ao centro e afunda abaixo de todas as coisas | Conferida por busca na tradução; numeração de Bekker não conferida |
+| 14 | ARISTÓTELES. *Meteorologia* (Μετεωρολογικά), livro IV. (Trad. ingl.: *Meteorology*, trad. E. W. Webster. Oxford: Clarendon Press, 1923.) | Secar e solidificar; a cerâmica endurece secando | Conferida por busca na tradução; numeração de Bekker não conferida |
 
 ### Pendências
 

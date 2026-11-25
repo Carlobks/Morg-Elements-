@@ -3,7 +3,7 @@
 ## Objetivo
 
 Polir a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ (republicar sempre pelo mesmo `file_path`).
-Passo em curso: coluna com bolhas (água) e grãos assentando (terra), publicado (versão 7); aguardando o retorno do dono.
+Passo em curso: terra da coluna refeita como sedimento com rachaduras (versão 8); aguardando o retorno do dono.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
@@ -32,7 +32,7 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 - Texto: não se altera sem pedido explícito do dono. A linha Humor saiu dos cards a pedido dele (o dado `humor` continua em `T`). Humanizer 2.1.1 em todo texto novo.
 - Navegação (dono): página inicial só com o círculo; card ao lado; seta fixa à direita; para baixo = Faísca → Fogo → Brasa → Pedra…; celular mostra 36% do círculo na borda; Voltar e dica na coluna do círculo; card sem moldura; toggle «Mais sobre o …»; subtipo tocado aparece sozinho e aberto, centro mostra os três fechados; vale para celular e computador.
 - Cores dos subtipos: tokens `--s-*` nos dois temas, contraste ≥ 4,5 com `--on` (medido).
-- Coluna (dono): fogo e ar aprovados; água = bolhas subindo devagar, terra = grãos que descem e assentam no pé (`colFx.bolha`, `colFx.grao`, `colFx.dot`); terra com `#colfx.on.terra{opacity:.8}` para aparecer no tema claro. Banner intocado.
+- Coluna (dono): fogo e ar aprovados; água = bolhas subindo devagar (`colFx.bolha`). Terra = ideia A + rachaduras de B (dono), apoiada em Aristóteles [13][14] em `docs/pesquisa.md` 2.4: poucos grãos caem pesados (`colFx.grao`), viram camadas no pé (`colFx.sedimento`, limite abaixo de `#hint`), as antigas racham em rede (`colFx.racha`), repousam 2,5 s, compactam e recomeçam; `#colfx.on.terra{opacity:.8}`. Banner intocado.
 - Polimento (dono): esconder «Subtipos» quando há um subtipo só (com os três, continua); título «Melancólico TERRA» na mesma linha, título primeiro; animação pelo caminho A, para os quatro elementos, mantendo o banner.
 
 ## Descartado
@@ -42,6 +42,7 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 - Cores dos subtipos por `color-mix` entre vizinhos: rosadas e apagadas.
 - Texto branco fixo sobre os setores: ilegível no tema escuro (usar `--on`).
 - Coluna v6: terra e água só numa faixa de 90 px no pé, coluna vazia acima → destoava do fogo e do ar (dono). Substituído por bolhas e grãos.
+- Terra v7 (grãos finos caindo devagar pela altura inteira): «neve marrom» (dono). Raízes: «raiz não é terra» (dono). Rachaduras só verticais e claras: pareciam riscos; viraram rede, escura no tema claro.
 - Animação caminho B (um canvas atrás da tela inteira, partículas passando da coluna ao banner): o banner rola e a coluna não, a continuidade quebra. Caminho C (tirar o banner): o dono quer o banner.
 - Print com `fullPage: true`: os canvas saem vazios (redimensiona antes do quadro). Usar print normal.
 - Teste de celular sem `<meta name="viewport">` abre a 980 px; a meta já está no arquivo.
@@ -50,4 +51,4 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 ## Próximos passos
 
 1. Esperar o retorno do dono sobre a versão 6. **Não tocar** sem pedido: textos, dados (`T`, `SUB`, `REFS`), página inicial, toggles, gestos, cores, círculo, banner, `docs/pesquisa.md`.
-2. Se ele pedir ajuste na animação da coluna: densidade em `colFx.count()`, velocidade em `colFx.bolha`/`colFx.grao`, opacidade em `#colfx.on{opacity:.55}`, faixa de terra e água em `colFx.BAND` (90).
+2. Se ele pedir ajuste na animação da coluna: densidade em `colFx.count()`, velocidade em `colFx.bolha`/`colFx.grao`, ciclo da terra em `colFx.sedimento`, opacidade em `#colfx.on{opacity:.55}`, faixa de terra e água em `colFx.BAND` (90).
