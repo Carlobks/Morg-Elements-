@@ -3,11 +3,11 @@
 ## Objetivo
 
 Polir a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ (republicar sempre pelo mesmo `file_path`).
-Passo em curso: plano do polimento aprovado pelo dono (seção «Próximos passos»). Nenhum código dele foi escrito ainda.
+Passo em curso: polimento feito, publicado (versão 6) e no remoto; aguardando o retorno do dono.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
-Commits: `4094219` (fase 2, subtipos), `f2566d4` (fase 3, visual), `3592094` (humanizer), `1141ae7` (navegação pelo círculo), `85284bf` (ajustes do celular). Todos no remoto. `git status -s`: limpo.
+Commits: `4094219` (fase 2, subtipos), `f2566d4` (fase 3, visual), `3592094` (humanizer), `1141ae7` (navegação pelo círculo), `85284bf` (ajustes do celular), `0b716d4` (polimento: título na mesma linha, «Subtipos» escondido com um subtipo, `#colfx` na coluna). Todos no remoto. `git status -s`: limpo.
 
 | Caminho | Status | O que é |
 |---|---|---|
@@ -19,6 +19,7 @@ Como a página funciona hoje (verificado no código e no teste):
 - Página inicial: título, `#circle` (SVG; o grupo `#rot` gira; `#pointer` fixo a 90°), legenda, «Rever a animação», toggles `.tg` «Os eixos» (`#p-eixos`) e «As fontes» (`#p-fontes`), rodapé.
 - Toque num setor ou no núcleo chama `enter(qi,si)`: o SVG vai para `#fcirc` (coluna esquerda da camada `#focus`, com `.fback` e `.fhint`), `show()` (linha ~786) gira, marca `#selpath` e mostra o card em `#fpanel`. Gestos: para baixo/cima troca (`stepBy`), para a direita volta (`leave`). Roda, ↑ ↓ e Esc no computador.
 - Card (template em `cols.insertAdjacentHTML`, linha ~590): `canvas.fx` (banner), `.top` com `<div class="el">` (linha 595) e `<h3>`, `.chips`, resumo, `details.more` «Mais sobre o …», bloco com `<h4>Subtipos</h4>` (linha 609), `.hint1`, `.subs`. `.card.one` = só um subtipo visível.
+- Coluna: `<canvas id="colfx">` em `#fcirc`, objeto `colFx` (antes de `fxList`) reaproveita `FX`; `colFx.set(card)` em `show()`, `colFx.off()` em `leave()`.
 - Efeitos: objeto `FX` (fogo, agua, terra, ar com `n`, `make`, `step`, `bg`, `draw`); `fxList` (linha 737) a partir de `canvas.fx`; `loop` (linha 750) só desenha os visíveis; `fxStill()` no movimento reduzido.
 
 Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 escuro e 1300 px claro: toque em subtipo e no centro, gestos, voltar, toggle «Mais sobre», referência. Último resultado: `errs []`, `overflow false`.
@@ -46,14 +47,5 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 
 ## Próximos passos
 
-Mexer só em `index.html` e só no que está abaixo. **Não tocar:** textos, dados (`T`, `SUB`, `REFS`), página inicial, toggles dos eixos e das fontes, gestos e teclas, cores, círculo e animação de entrada, banner do card (fica como está), `docs/pesquisa.md`.
-
-1. «Subtipos» e título:
-   - No template do card, dar `class="subh"` ao `<h4>Subtipos</h4>` e esconder com `#fpanel .card.one .subh{display:none}`, como já se faz com `.hint1`.
-   - Em `.top`, pôr o `<h3>` antes do `<div class="el">` num contêiner `display:flex;align-items:baseline;gap:10px;flex-wrap:wrap`, para ler «Melancólico TERRA».
-2. Animação na coluna (caminho A):
-   - Novo `<canvas id="colfx" aria-hidden="true">` dentro de `#fcirc`, com `position:absolute;inset:0;z-index:0;pointer-events:none`; o SVG, `.fback` e `.fhint` com `position:relative;z-index:1`.
-   - Um objeto `colFx` à parte que reaproveita `FX[el]`; em `show()`, trocar o tipo e a cor (a cor de `.el` do card ativo) com transição de opacidade (~400 ms).
-   - Versão para coluna alta e estreita: fogo sobe da altura inteira; ar cruza a altura inteira; terra e água desenham o `bg` só numa faixa de ~90 px no pé (`ctx.translate(0,h-90)` com `h=90`). Alfa geral ~0,55 para manter Voltar, dica e nomes legíveis.
-   - Só anima com `body.focus`; parado no movimento reduzido (como `fxStill`); redimensionar com o `ResizeObserver` existente.
-3. Conferir com o `nav.js` (Pixel 5 escuro e 1300 px claro), olhar um print de cada, commitar, dar push e republicar no mesmo artifact.
+1. Esperar o retorno do dono sobre a versão 6. **Não tocar** sem pedido: textos, dados (`T`, `SUB`, `REFS`), página inicial, toggles, gestos, cores, círculo, banner, `docs/pesquisa.md`.
+2. Se ele pedir ajuste na animação da coluna: densidade em `colFx.count()`, opacidade em `#colfx.on{opacity:.55}`, faixa de terra e água em `colFx.BAND` (90).
