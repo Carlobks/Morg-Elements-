@@ -32,7 +32,7 @@ Teste intermitente: o pre-push do F3 falhou uma vez e o `npm test` seguinte tamb
 ```
 "inicio: 604 px", "foco-Faísca: 335 px", … "painel-fontes: 389 px"
 ```
-Isolado (3×) e em 5 rodadas inteiras depois, passou. Causa não achada; vai para o F4.
+Isolado (3×) e em 5 rodadas inteiras depois, passou. No push do fim do dia falhou de novo, desta vez `[celular-escuro] igual à referência` (19 linhas de diferença), então não é só o pc-claro. Os prints da falha não ficam em `test-results/` (só o `error-context.md`): o `attach` do teste não grava arquivo. Causa não achada; vai para o F4.
 
 ## Decisões e porquê
 
@@ -60,5 +60,5 @@ Isolado (3×) e em 5 rodadas inteiras depois, passou. Causa não achada; vai par
 ## Próximos passos
 
 1. Sessão nova (o container é outro): `git config core.hooksPath .githooks` (sem isto os hooks ficam desligados); `npm ci`; reinstalar o gitleaks 8.30.1 em `~/.local/bin` com o sha256 do `.github/workflows/ci.yml`; reclonar o Morg-laws só para leitura se for preciso. Conferir com `sh scripts/testar.sh` (15 OK) e `npm test` (8 passed).
-2. Pedir o «sim» do dono para o F4 (auditoria do código, em partes de ~120 linhas, relatório em `docs/auditoria-2026-11-25.md`), começando pelo teste intermitente do pc-claro: repetir a suíte até falhar e guardar `test-results/` (os prints da falha) antes de rodar de novo.
+2. Pedir o «sim» do dono para o F4 (auditoria do código, em partes de ~120 linhas, relatório em `docs/auditoria-2026-11-25.md`), começando pelo teste intermitente (pc-claro e celular-escuro): primeiro fazer o `referencia.spec.js` gravar os prints diferentes em arquivo (referência e trabalho), depois repetir a suíte até falhar e olhar os dois.
 3. F5 a F7 conforme o plano; depois, o plano da publicação com release.
