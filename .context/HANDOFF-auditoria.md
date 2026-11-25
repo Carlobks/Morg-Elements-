@@ -40,5 +40,5 @@ Prova do F2: os cinco arquivos juntados de volta (com `<style>`/`<script>` no lu
 
 ## Próximos passos
 
-1. Pedir o «sim» do dono para o F3 (barreiras: `.githooks/`, `scripts/portoes/`, testes Python, `.github/workflows/ci.yml` com `fetch-depth: 0`), modelos em `/home/user/carlobks/morg-laws/modelos/` (clone só leitura; reclonar se a sessão for nova).
+1. Pedir o «sim» do dono para o F3 (barreiras: `.githooks/`, `scripts/portoes/`, testes Python, `.github/workflows/ci.yml` com `fetch-depth: 0`), modelos em `../carlobks/morg-laws/modelos/` (clone só leitura; reclonar se a sessão for nova).
 2. F4 a F7 conforme o plano.
