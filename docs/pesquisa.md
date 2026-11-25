@@ -64,6 +64,23 @@ O efeito da terra na coluna do círculo segue três ideias de Aristóteles:
 
 Por isso, no efeito, os grãos caem rápido e retos, param no pé e formam camadas, e as camadas mais antigas racham ao secar. *A tradução visual é escolha do projeto.*
 
+### 2.5 Os subtipos no efeito da página
+
+O subtipo neutro usa o efeito do elemento. Os outros dois mudam alguns traços dele, puxados pelo vizinho, como na lógica dos subtipos [3]. O esquema dos subtipos continua sendo hipótese do projeto (seção 3). As fontes abaixo apoiam só a imagem física de cada um.
+
+| Subtipo | Puxado por | No efeito | Apoio |
+|---|---|---|---|
+| Faísca | Ar | Fagulhas menores e rápidas, em zigue-zague, que se apagam cedo | O fogo é leve e sobe [13] |
+| Brasa | Terra | Poucas partículas que quase não sobem e um brilho no pé que pulsa | Carvão, chama e luz como espécies de fogo [15] |
+| Vapor | Ar | Bolhas mais rápidas, que crescem e se desfazem antes do topo | O calor levanta o vapor, mais quente que a água [14] |
+| Gelo | Terra | Ondas quase retas e paradas, bolhas presas | O frio solidifica ao expulsar o calor; a geada é vapor congelado [14] |
+| Argila | Água | Camadas onduladas e moles, sem rachaduras, grãos mais lentos | A terra úmida é mole; a cerâmica endurece ao secar [14] |
+| Pedra | Fogo | Camadas densas, rachaduras retas e grossas, grãos maiores | O que endurece pelo calor é de terra, como a cerâmica [14] |
+| Brisa | Água | Menos rajadas, lentas, longas e curvas | Sem fonte |
+| Vento | Fogo | Rajadas rápidas, numerosas, retas, subindo um pouco | O vento vem da exalação seca da terra [14] |
+
+*A tradução visual é escolha do projeto.*
+
 ## 3. Subtipos (as variações de cada elemento)
 
 > **Hipótese do projeto.** Não encontramos fonte primária para o esquema "fogo, faísca e brasa / água, vapor e gelo / terra, argila e pedra / ar, brisa e vento". O esquema está registrado aqui como hipótese de trabalho, e a origem continua desconhecida.
@@ -123,7 +140,8 @@ O conteúdo completo, com características, exemplos e subtipos, está em `index
 | 11 | LAHAYE, T. *Spirit-Controlled Temperament*. Wheaton, IL: Tyndale House, 1966. | Temperamento primário e secundário (combinações) | Não conferida nesta sessão |
 | 12 | EYSENCK, H. J. *The Biological Basis of Personality*. Springfield, IL: Charles C. Thomas, 1967. | Temperamentos num plano de dois eixos (extroversão e neuroticismo) | Não conferida nesta sessão |
 | 13 | ARISTÓTELES. *Do céu* (Περὶ οὐρανοῦ), livro IV, cap. 1 e 4. (Trad. ingl.: *On the Heavens*, trad. J. L. Stocks. Oxford: Clarendon Press, 1922.) | A terra é pesada, desce ao centro e afunda abaixo de todas as coisas | Conferida por busca na tradução; numeração de Bekker não conferida |
-| 14 | ARISTÓTELES. *Meteorologia* (Μετεωρολογικά), livro IV. (Trad. ingl.: *Meteorology*, trad. E. W. Webster. Oxford: Clarendon Press, 1923.) | Secar e solidificar; a cerâmica endurece secando | Conferida por busca na tradução; numeração de Bekker não conferida |
+| 14 | ARISTÓTELES. *Meteorologia* (Μετεωρολογικά), livros I, II e IV. (Trad. ingl.: *Meteorology*, trad. E. W. Webster. Oxford: Clarendon Press, 1923.) | Vapor e exalação seca (I); vento (II); secar e solidificar, a cerâmica endurece secando (IV) | Conferida por busca na tradução; numeração de Bekker não conferida |
+| 15 | ARISTÓTELES. *Tópicos* (Τοπικά). Passagem sobre carvão, chama e luz como espécies de fogo. | Brasa | Não conferida: só a menção no índice de uma tradução; livro e trecho não localizados |
 
 ### Pendências
 

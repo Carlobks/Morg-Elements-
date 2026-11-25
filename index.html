@@ -740,20 +740,30 @@ const FX = {
   }
 };
 /* Mesmo efeito, mais fraco, na coluna do círculo (só com um card aberto) */
-const colFx={cv:document.getElementById('colfx'),ps:[],w:0,h:0,el:null,card:null,col:'#888',raf:0,sw:0,
+/* Mesmo efeito, mais fraco, na coluna do círculo (só com um card aberto).
+   Cada subtipo muda alguns parâmetros da base, puxados pelo vizinho; a troca é suave. */
+const SUBFX={
+  fogo:{faisca:{spd:1.8,life:4.5,jit:3,size:.6,dens:1,glow:0},  base:{spd:1,life:1,jit:1,size:1,dens:1,glow:0},  brasa:{spd:.3,life:2.5,jit:.3,size:1.3,dens:.35,glow:1}},
+  agua:{vapor:{spd:2,grow:1,freeze:0},                           base:{spd:1,grow:0,freeze:0},                    gelo:{spd:.05,grow:0,freeze:1}},
+  terra:{argila:{grav:.55,soft:1,hard:0},                        base:{grav:1,soft:0,hard:0},                     pedra:{grav:1.3,soft:0,hard:1}},
+  ar:{brisa:{spd:.5,dens:.4,len:1.6,amp:1.8,frq:.55,rise:0},     base:{spd:1,dens:.62,len:1,amp:1,frq:1,rise:0},  vento:{spd:2.3,dens:1,len:1.3,amp:.2,frq:1,rise:.3}}
+};
+const subKey=n=>n?n.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase():'base';
+const colFx={cv:document.getElementById('colfx'),ps:[],w:0,h:0,el:null,card:null,col:'#888',raf:0,sw:0,clk:0,v:{},vt:{},
   BAND:90,
   kind(){return FX[this.el]},
-  count(){const {w,h}=this;return this.el==='fogo'?Math.min(160,Math.round(w*h/480)):this.el==='ar'?Math.min(40,Math.round(w*h/1900)):
+  count(){const {w,h}=this;return this.el==='fogo'?Math.min(160,Math.round(w*h/480)):this.el==='ar'?Math.min(64,Math.round(w*h/1200)):
     this.el==='agua'?Math.min(70,Math.round(w*h/3200)):Math.min(40,Math.round(w*h/9000))},
   // água: bolhas que sobem devagar; terra: grãos pesados que caem, param e viram camadas que racham ao secar
   bolha(y){const {w,h}=this;return {x:rnd(0,w),y:y??rnd(0,h),vy:rnd(.18,.55),r:rnd(1.4,4.2),ph:rnd(0,6.3)}},
   grao(y){const {w,h}=this;return {x:rnd(0,w),y:y??rnd(-h*.6,h*.6),vy:rnd(.4,1.4),s:rnd(1.8,3.4)}},
   racha(){const {w}=this,n=Math.max(3,Math.round(w/34)),V=[];        // rede de rachaduras, como barro secando
-    for(let i=0;i<n;i++){let x=(i+rnd(.25,.75))*w/n,y=0;const pts=[[x,0]];while(y<1){y=Math.min(1,y+rnd(.18,.32));x+=rnd(-6,6);pts.push([x,y])}V.push({pts,k:rnd(.7,1)})}
-    const xAt=(c,y)=>{const P=c.pts;for(let j=1;j<P.length;j++)if(P[j][1]>=y){const [a,b]=[P[j-1],P[j]],f=(y-a[1])/((b[1]-a[1])||1);return a[0]+(b[0]-a[0])*f}return P[P.length-1][0]};
-    const H=[];for(let i=0;i<n-1;i++)for(let m=0,M=Math.random()<.5?1:2;m<M;m++){const y=rnd(.15,.9),y2=y+rnd(-.12,.12),x1=xAt(V[i],y),x2=xAt(V[i+1],y2);
-      H.push({a:[x1,y],m:[(x1+x2)/2+rnd(-4,4),(y+y2)/2+rnd(-.06,.06)],b:[x2,y2],th:rnd(.35,.9)})}
+    for(let i=0;i<n;i++){const x=(i+rnd(.25,.75))*w/n;let y=0,o=0;const pts=[[x,0,0]];while(y<1){y=Math.min(1,y+rnd(.18,.32));o+=rnd(-6,6);pts.push([x,y,o])}V.push({pts,k:rnd(.7,1)})}
+    const H=[];for(let i=0;i<n-1;i++)for(let m=0,M=Math.random()<.5?1:2;m<M;m++){const y=rnd(.15,.9);
+      H.push({i,y,y2:y+rnd(-.12,.12),mx:rnd(-4,4),my:rnd(-.06,.06),th:rnd(.35,.9)})}
     return {V,H}},
+  cx(pt,j){return pt[0]+pt[2]*j},                                     // j: quanto do zigue-zague fica (a pedra é mais reta)
+  xAt(c,y,j){const P=c.pts;for(let k=1;k<P.length;k++)if(P[k][1]>=y){const a=P[k-1],b=P[k],f=(y-a[1])/((b[1]-a[1])||1);return this.cx(a,j)+(this.cx(b,j)-this.cx(a,j))*f}return this.cx(P[P.length-1],j)},
   terraIni(){const B=this.BAND,base=B*.45,hb=document.getElementById('hint').getBoundingClientRect(),cb=this.cv.getBoundingClientRect(),
     livre=cb.bottom-hb.bottom-10;   // as camadas param abaixo da dica
     this.ter={base,max:Math.max(base+24,Math.min(this.h*.32,B*2,livre)),sed:base,fase:0,t0:0,cr:this.racha(),fade:1}},
@@ -762,51 +772,75 @@ const colFx={cv:document.getElementById('colfx'),ps:[],w:0,h:0,el:null,card:null
     c.width=Math.round(this.w*d);c.height=Math.round(this.h*d);this.ctx=c.getContext('2d');this.ctx.setTransform(d,0,0,d,0,0);
     this.ps=this.el&&this.w?Array.from({length:this.count()},()=>this.make()):[];if(this.el==='terra')this.terraIni()},
   recol(){if(this.card)this.col=getComputedStyle(this.card.querySelector('.el')).color;this.bgc=getComputedStyle(document.body).backgroundColor},
-  step(p,t){const k=this.kind(),{w,h}=this;
-    if(this.el==='fogo'){p.y-=p.vy;p.x+=Math.sin(t*.004+p.ph)*.35;p.life-=.007*p.vy*Math.min(1,90/h);
+  ease(){for(const k in this.vt)this.v[k]+=(this.vt[k]-this.v[k])*.05},
+  active(i){return i<this.ps.length*(this.v.dens??1)},
+  step(p,i){const k=this.kind(),{w,h}=this,v=this.v,t=this.clk;
+    if(this.el==='fogo'){p.y-=p.vy*v.spd;p.x+=Math.sin(t*.004+p.ph)*.35*v.jit;p.life-=.007*p.vy*v.life*Math.min(1,90/h);
       if(p.life<=0||p.y<-4)Object.assign(p,k.make(w,h),{y:h+4,life:1})}
-    else if(this.el==='agua'){p.y-=p.vy;p.x+=Math.sin(t*.0016+p.ph)*.25;if(p.y<-p.r-2)Object.assign(p,this.bolha(h-this.BAND*.4))}
-    else if(this.el==='terra'){const T=this.ter;p.vy=Math.min(p.vy+.07,5);p.y+=p.vy;
+    else if(this.el==='agua'){p.y-=p.vy*v.spd;p.x+=Math.sin(t*.0016+p.ph)*.25*v.spd;if(p.y<-p.r*3-2)Object.assign(p,this.bolha(h-this.BAND*.4))}
+    else if(this.el==='terra'){const T=this.ter;p.vy=Math.min(p.vy+.07*v.grav,5*v.grav);p.y+=p.vy;
       if(p.y>=h-T.sed){if(T.fase===0)T.sed=Math.min(T.max,T.sed+(T.max-T.base)/(this.ps.length*9));Object.assign(p,this.grao(-4-rnd(0,h*.5)))}}
-    else if(k.step)k.step(p,w,h,t)},
-  sedimento(t){const {ctx,w,h,col}=this,T=this.ter,N=6;
+    else if(this.el==='ar'){p.x+=p.v*v.spd;p.y-=v.rise;
+      if(p.x-p.len*v.len>w||p.y<-10)Object.assign(p,k.make(w,h),{x:-rnd(0,40)})}},
+  sedimento(t){const {ctx,w,h,col}=this,T=this.ter,N=6,v=this.v;
     if(T.fase===0&&T.sed>=T.max){T.fase=1;T.t0=t}
     if(T.fase===1){const k=(t-T.t0-2500)/3000;            // repousa, depois compacta e recomeça
       if(k>0){const e=Math.min(1,k);T.sed=T.max-(T.max-T.base)*e*e*(3-2*e);T.fade=1-e;
         if(k>=1){T.fase=0;T.fade=1;T.cr=this.racha()}}}
-    for(let i=0;i<N;i++){const y0=h-T.sed+T.sed*i/N;ctx.beginPath();ctx.moveTo(0,h);
-      for(let x=0;x<=w+6;x+=6)ctx.lineTo(x,y0+Math.sin(x*.035+i*1.7)*(i?1:1.8));
-      ctx.lineTo(w,h);ctx.closePath();ctx.globalAlpha=i?.11:.2;ctx.fillStyle=col;ctx.fill()}
+    for(let i=0;i<N;i++){const y0=h-T.sed+T.sed*i/N,am=(i?1:1.8)*(1+v.soft*2.5);ctx.beginPath();ctx.moveTo(0,h);   // a argila ondula, mole
+      for(let x=0;x<=w+6;x+=6)ctx.lineTo(x,y0+Math.sin(x*.035+i*1.7+t*.0005*v.soft)*am);
+      ctx.lineTo(w,h);ctx.closePath();ctx.globalAlpha=(i?.11:.2)+.08*v.hard;ctx.fillStyle=col;ctx.fill()}
     const prog=Math.min(1,Math.max(0,((T.sed-T.base)/(T.max-T.base)-.2)/.65)),top=h-T.sed*.6,zh=h-top;   // camadas antigas racham ao secar
     const rgb=(this.bgc.match(/\d+/g)||[0,0,0]).map(Number),claro=rgb[0]*.3+rgb[1]*.59+rgb[2]*.11>140;
-    ctx.strokeStyle=claro?col:this.bgc;ctx.lineWidth=claro?1:1.3;ctx.lineJoin='round';ctx.lineCap='round';
-    const A=(claro?.75:.9)*(T.fase===1?T.fade:1),P=T.fase===1?1:prog,Y=y=>top+Math.min(1,y)*zh;
+    const A=(claro?.75:.9)*(T.fase===1?T.fade:1)*(1-v.soft),P=T.fase===1?1:prog,Y=y=>top+Math.min(1,y)*zh,j=1-.85*v.hard;  // úmida não racha
+    if(A<=.01)return;
+    ctx.strokeStyle=claro?col:this.bgc;ctx.lineWidth=(claro?1:1.3)+.6*v.hard;ctx.lineJoin=v.hard>.5?'miter':'round';ctx.lineCap='round';
     ctx.globalAlpha=A;ctx.beginPath();
     T.cr.V.forEach(c=>{const L=P*c.k*(c.pts.length-1);
-      c.pts.forEach(([x,y],j)=>{if(j>L+1)return;if(!j){ctx.moveTo(x,Y(y));return}const f=Math.min(1,L-j+1),[px,py]=c.pts[j-1];ctx.lineTo(px+(x-px)*f,Y(py+(y-py)*f))})});
+      c.pts.forEach((pt,k)=>{if(k>L+1)return;if(!k){ctx.moveTo(this.cx(pt,j),Y(pt[1]));return}const f=Math.min(1,L-k+1),q=c.pts[k-1],qx=this.cx(q,j);
+        ctx.lineTo(qx+(this.cx(pt,j)-qx)*f,Y(q[1]+(pt[1]-q[1])*f))})});
     ctx.stroke();
     T.cr.H.forEach(c=>{const f=Math.min(1,(P-c.th)/.15);if(f<=0)return;ctx.globalAlpha=A*f;ctx.beginPath();
-      const g=f*2;ctx.moveTo(c.a[0],Y(c.a[1]));
-      if(g<=1)ctx.lineTo(c.a[0]+(c.m[0]-c.a[0])*g,Y(c.a[1]+(c.m[1]-c.a[1])*g));
-      else{ctx.lineTo(c.m[0],Y(c.m[1]));ctx.lineTo(c.m[0]+(c.b[0]-c.m[0])*(g-1),Y(c.m[1]+(c.b[1]-c.m[1])*(g-1)))}
+      const ax=this.xAt(T.cr.V[c.i],c.y,j),bx=this.xAt(T.cr.V[c.i+1],c.y2,j),mx=(ax+bx)/2+c.mx*j,my=(c.y+c.y2)/2+c.my*j,g=f*2;
+      ctx.moveTo(ax,Y(c.y));
+      if(g<=1)ctx.lineTo(ax+(mx-ax)*g,Y(c.y+(my-c.y)*g));
+      else{ctx.lineTo(mx,Y(my));ctx.lineTo(mx+(bx-mx)*(g-1),Y(my+(c.y2-my)*(g-1)))}
       ctx.stroke()})},
-  dot(p,col){const {ctx,h}=this,f=Math.min(1,p.y/(h*.25));   // somem perto do topo
-    if(this.el==='agua'){ctx.globalAlpha=.75*Math.max(0,f);ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.3);ctx.stroke()}
-    else{ctx.globalAlpha=Math.max(0,Math.min(1,(p.y+4)/40))*.95;ctx.fillStyle=col;ctx.fillRect(p.x,p.y,p.s,p.s)}},
+  dot(p,col){const {ctx,h}=this,v=this.v;
+    if(this.el==='agua'){const g=1+v.grow*1.6*Math.max(0,1-p.y/h),f=Math.min(1,p.y/(h*(.25+.35*v.grow)));   // o vapor cresce e se desfaz antes do topo
+      ctx.globalAlpha=.75*Math.max(0,f);ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(p.x,p.y,p.r*g,0,6.3);ctx.stroke()}
+    else{const s=p.s*(1+.7*v.hard);ctx.globalAlpha=Math.max(0,Math.min(1,(p.y+4)/40))*.95;ctx.fillStyle=col;ctx.fillRect(p.x,p.y,s,s)}},
+  ondas(){const {ctx,w,col}=this,B=this.BAND,t=this.clk,a=1-.85*this.v.freeze;   // o gelo deixa as ondas quase retas e paradas
+    ctx.save();ctx.translate(0,this.h-B);
+    for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(0,B);
+      for(let x=0;x<=w+4;x+=4)ctx.lineTo(x,B*.42+i*9+Math.sin(x*(.018-i*.004)+t*(.0011+i*.0004)+i*1.7)*(5-i)*a);
+      ctx.lineTo(w,B);ctx.closePath();ctx.globalAlpha=.13+i*.05+.08*this.v.freeze;ctx.fillStyle=col;ctx.fill()}
+    ctx.restore()},
+  brasa(){const {ctx,w,h,col}=this,g=this.v.glow;if(g<.01)return;          // brilho no pé que pulsa devagar, como carvão
+    const gr=ctx.createLinearGradient(0,h,0,h-150);gr.addColorStop(0,col);gr.addColorStop(1,'transparent');
+    ctx.globalAlpha=g*(.32+.16*Math.sin(this.clk*.0018));ctx.fillStyle=gr;ctx.fillRect(0,h-150,w,150)},
+  fogo(p,col){const {ctx}=this;ctx.globalAlpha=Math.max(0,p.life)*.9;ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y,p.r*(.5+p.life*.6)*this.v.size,0,6.3);ctx.fill()},
+  ar(p,col){const {ctx}=this,v=this.v,t=this.clk,L=p.len*v.len;ctx.globalAlpha=.55;ctx.lineWidth=1.4;ctx.lineCap='round';ctx.beginPath();
+    for(let i=0;i<=10;i++){const x=p.x-L+L*i/10,y=p.y+Math.sin(x*.025*v.frq+p.ph+t*.001)*4*v.amp;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+    const g=ctx.createLinearGradient(p.x-L,0,p.x,0);g.addColorStop(0,'transparent');g.addColorStop(1,col);ctx.strokeStyle=g;ctx.stroke()},
   frame(t){const {ctx,w,h,col}=this,k=this.kind();if(!ctx||!k)return;ctx.clearRect(0,0,w,h);
-    if(this.el==='terra'){this.ps.forEach(p=>{this.step(p,t);this.dot(p,col)});this.sedimento(t)}
-    else if(this.el==='agua'){this.ps.forEach(p=>{this.step(p,t);this.dot(p,col)});
-      ctx.save();ctx.translate(0,h-this.BAND);k.bg(ctx,w,this.BAND,col,t);ctx.restore()}
-    else{k.bg&&k.bg(ctx,w,h,col,t);this.ps.forEach(p=>{this.step(p,t);k.draw(ctx,p,col,t)})}
+    this.ease();this.clk+=16.7*(this.v.spd??1);
+    const each=fn=>this.ps.forEach((p,i)=>{if(!this.active(i))return;this.step(p,i);fn(p)});
+    if(this.el==='terra'){each(p=>this.dot(p,col));this.sedimento(t)}
+    else if(this.el==='agua'){each(p=>this.dot(p,col));this.ondas()}
+    else if(this.el==='fogo'){k.bg(ctx,w,h,col);this.brasa();each(p=>this.fogo(p,col))}
+    else each(p=>this.ar(p,col));
     ctx.globalAlpha=1},
   loop(t){this.raf=0;if(reduce.matches||!document.body.classList.contains('focus'))return;
     if(this.n++%45===0)this.recol();this.frame(t);this.raf=requestAnimationFrame(x=>this.loop(x))},
   n:0,
   run(){if(!this.raf&&!reduce.matches&&this.el)this.raf=requestAnimationFrame(t=>this.loop(t))},
-  still(){if(!this.el)return;this.recol();for(let i=0;i<240;i++)this.ps.forEach(p=>this.step(p,i*16));this.frame(4000)},
-  set(card){const el=card.querySelector('canvas.fx').dataset.el;
-    if(el===this.el&&this.cv.classList.contains('on')){this.card=card;return}
-    clearTimeout(this.sw);const go=()=>{this.el=el;this.card=card;this.recol();this.size();
+  still(){if(!this.el)return;this.recol();Object.assign(this.v,this.vt);
+    for(let i=0;i<240;i++){this.clk+=16.7*(this.v.spd??1);this.ps.forEach((p,j)=>this.step(p,j))}this.frame(4000)},
+  target(el,sub){const T=SUBFX[el];return {...(T[subKey(sub)]||T.base)}},
+  set(card,sub){const el=card.querySelector('canvas.fx').dataset.el;
+    if(el===this.el&&this.cv.classList.contains('on')){this.card=card;this.vt=this.target(el,sub);if(reduce.matches)this.still();return}
+    clearTimeout(this.sw);const go=()=>{this.el=el;this.card=card;this.vt=this.target(el,sub);this.v={...this.vt};this.recol();this.size();
       this.cv.classList.toggle('terra',el==='terra');this.cv.classList.add('on');reduce.matches?this.still():this.run()};
     if(this.el&&this.cv.classList.contains('on')){this.cv.classList.remove('on');this.sw=setTimeout(go,200)}else go()},
   off(){clearTimeout(this.sw);this.cv.classList.remove('on');this.el=null;cancelAnimationFrame(this.raf);this.raf=0}
@@ -868,7 +902,7 @@ function show(qi,si){
   sectors.forEach((p,i)=>p.classList.toggle('dim', si==null ? SEQ[i][0]!==qi : !(SEQ[i][0]===qi&&SEQ[i][1]===si)));
   document.querySelectorAll('#cols .card').forEach(c=>c.classList.toggle('on',c.id===q.t.id));
   const card=document.getElementById(q.t.id);
-  colFx.set(card);
+  colFx.set(card, si==null?null:q.order[si]);
   if(changed){ card.querySelector('details.more').open=false; panelTo(0,false) } else panelTo(0,true);
   const pick = si==null ? null : subId(q.t, q.t.subs.find(x=>x.nome===q.order[si]));
   card.classList.toggle('one', si!=null);
