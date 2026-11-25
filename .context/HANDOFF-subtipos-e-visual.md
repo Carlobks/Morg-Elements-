@@ -45,6 +45,8 @@ Testes: não há suíte. Na sessão, uma checagem com Playwright em 1300 px (cla
 - Fase 3 (`f2566d4`): cores próprias `--s-*` nos dois temas (contraste ≥ 4,5 com `--on`), canvas por elemento no topo dos cards, ícones SVG animados, halo e brilho "respirando" por quadrante, revelação com o scroll, nomes do centro maiores (viewBox -276..276). Movimento reduzido deixa tudo parado.
 - Humanizer: negrito no meio das frases retirado de `docs/pesquisa.md`; textos novos já escritos seguindo a skill.
 
+- Navegação pelo círculo (pedido do dono depois da fase 3): a página inicial mostra só o título, o círculo e dois toggles ("Os eixos" = tabela dos eixos e texto dos vizinhos; "As fontes" = linha do tempo e referências). Tocar num subtipo ou no nome do temperamento abre a camada `#focus`: o círculo vai para a esquerda (no celular só 36% dele aparece, encostado na borda), uma seta fixa à direita marca a seleção e o card do temperamento aparece ao lado, com o subtipo aberto. Deslizar para baixo = próximo no sentido horário (Faísca → Fogo → Brasa → Pedra…), para cima = anterior, para a direita = voltar. No computador: roda do mouse, ↑ ↓, Esc e o botão voltar do navegador. Um número de referência leva às fontes. Nenhum texto foi alterado.
+
 ## Próximos passos (originais, todos feitos)
 
 1. Fase 2: escrever os 12 subtipos aprofundados no `const T` de `index.html` (campos: imagem, traços, trabalho, relações, conflito, busca, exagero, base, equilíbrio), com o `<details>` e a tabela comparativa. Escrever já seguindo `.claude/skills/humanizer/SKILL.md`.

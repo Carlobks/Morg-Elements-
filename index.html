@@ -1,4 +1,5 @@
 <title>Morg Elements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,6 +132,58 @@ th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:u
 .note{margin-top:22px;max-width:70ch;font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
 footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
 
+
+/* ---------- Navegação pelo círculo ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#g-labels{pointer-events:none}
+#circle .core{cursor:pointer}
+#pointer{fill:var(--fg);opacity:0;transition:opacity .4s;pointer-events:none}
+#selpath{fill:none;stroke:var(--fg);stroke-width:3;stroke-linejoin:round;pointer-events:none}
+body.focus #pointer{opacity:1}
+body.focus #circle .axl{visibility:hidden}
+body.focus #circle .tname{font-size:16px}
+body.focus #circle .sector.dim{filter:saturate(.35) opacity(.5)}
+body.focus{overflow:hidden}
+#focus{position:fixed;inset:0;z-index:30;background:var(--bg);--cw:min(46vw,560px)}
+#focus[hidden]{display:none}
+#fcirc{position:absolute;top:0;bottom:0;left:0;width:var(--cw);display:flex;align-items:center;justify-content:center;touch-action:none;overscroll-behavior:contain;user-select:none;-webkit-user-select:none}
+#fcirc #circle{width:calc(var(--cw) - 48px);max-width:none}
+#fpanel{position:absolute;top:0;bottom:0;right:0;left:var(--cw);overflow-y:auto;overscroll-behavior:contain;padding:0 max(16px,env(safe-area-inset-right,0px)) 56px 12px;animation:fin .5s ease both}
+@keyframes fin{from{opacity:0;transform:translateX(18px)}}
+.fbar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px 0 12px;background:linear-gradient(var(--bg) 75%,transparent)}
+.fbar .hint{font-size:12.5px;color:var(--muted)}
+#fpanel .cols{display:block;max-width:680px;margin:4px 0 0}
+#fpanel .card{display:none}
+#fpanel .card.on{display:block}
+.fintro{max-width:680px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.fintro h2{font-size:1.35rem;margin-top:4px}
+.fintro .lead{font-size:14px}
+.sub.sel{background:color-mix(in oklab,var(--sc) 11%,transparent);box-shadow:0 0 0 1px var(--sc)}
+@media (max-width:899px){
+  #focus{--sz:min(78vw,310px);--cw:calc(var(--sz) * .36)}
+  #fcirc{justify-content:flex-start;overflow:hidden}
+  #fcirc #circle{width:var(--sz);flex:none;margin-left:calc(var(--sz) * -.64)}
+  #fpanel{padding-left:8px}
+  #fpanel .card .top{padding:14px 14px 12px}
+  #fpanel .card .body{padding:0 14px 16px}
+  #fpanel .sub{padding:10px 10px}
+}
+/* Toggles abaixo do círculo */
+.tgl{padding-block:0 28px}
+.tbtns{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:620px;margin:0 auto}
+.tg{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 40px 12px 14px;cursor:pointer;transition:border-color .2s}
+.tg:hover{border-color:var(--muted)}
+.tg[aria-expanded="true"]{border-color:var(--fg)}
+.tg .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tg .t{font-family:var(--display);font-size:1.3rem}
+.tg::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .25s}
+.tg[aria-expanded="true"]::after{transform:rotate(225deg);margin-top:-2px}
+.tpanel{animation:tin .45s ease both}
+.tpanel section{padding-block:8px 28px}
+@keyframes tin{from{opacity:0;transform:translateY(-8px)}}
+.refs li.hit{background:color-mix(in oklab,var(--ar) 14%,transparent);border-radius:6px}
+@media (prefers-reduced-motion: reduce){#fpanel,.tpanel{animation:none}}
+
 /* ---------- Fase 3: movimento ---------- */
 /* Reveal: só esconde quando o JS está ativo (.js), então sem JS tudo aparece. */
 .js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s ease var(--rd,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--rd,0s)}
@@ -185,25 +238,27 @@ footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
 <div class="wrap stage">
   <svg id="circle" viewBox="-276 -278 552 556" role="img" aria-labelledby="ctitle">
     <title id="ctitle">Círculo dos temperamentos: sanguíneo (ar) em cima à esquerda, colérico (fogo) em cima à direita, melancólico (terra) embaixo à direita, fleumático (água) embaixo à esquerda. Em cima ficam os expansivos, à direita os marcados.</title>
-    <g id="g-core"></g>
-    <g id="g-sectors"></g>
-    <g id="g-lines"></g>
-    <g id="g-labels"></g>
+    <g id="rot">
+      <g id="g-core"></g>
+      <g id="g-sectors"></g>
+      <g id="g-lines"></g>
+      <g id="g-labels"></g>
+      <path id="selpath" d=""/>
+    </g>
+    <path id="pointer" d="M222,0L246,-13L246,13Z"/>
   </svg>
   <p class="legend">Toque num subtipo para abrir a explicação dele. Cada elemento tem um centro neutro e muda de forma ao se aproximar de um vizinho.</p>
   <button class="btn" id="replay" type="button">Rever a animação</button>
 </div>
 
-<section id="temperamentos">
-  <div class="wrap">
-    <p class="eyebrow">Os quatro elementos</p>
-    <h2>Os temperamentos e seus subtipos</h2>
-    <p class="lead">Cada temperamento tem uma base e três formas. A do centro é neutra e as outras duas se inclinam para um vizinho. O subtipo deseja algo do vizinho, mas a pessoa precisa lembrar sempre da sua base.</p>
-    <nav class="jump" id="jump" aria-label="Ir para um temperamento"></nav>
-    <div class="cols" id="cols"></div>
-  </div>
-</section>
 
+<div class="wrap tgl">
+  <div class="tbtns">
+    <button class="tg" type="button" data-p="eixos" aria-expanded="false" aria-controls="p-eixos"><span class="k">Como ler o círculo</span><span class="t">Os eixos</span></button>
+    <button class="tg" type="button" data-p="fontes" aria-expanded="false" aria-controls="p-fontes"><span class="k">Origem e referências</span><span class="t">As fontes</span></button>
+  </div>
+</div>
+<div class="tpanel" id="p-eixos" hidden>
 <section id="leitura">
   <div class="wrap">
     <p class="eyebrow">Como ler o círculo</p>
@@ -232,6 +287,8 @@ footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
   </div>
 </section>
 
+</div>
+<div class="tpanel" id="p-fontes" hidden>
 <section id="origem">
   <div class="wrap">
     <p class="eyebrow">Origem das ideias</p>
@@ -260,6 +317,18 @@ footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
     <p class="note"><b>Subtipos.</b> Não encontramos fonte primária para o esquema fogo, faísca e brasa; água, vapor e gelo; terra, argila e pedra; ar, brisa e vento. Ele é uma hipótese de trabalho do projeto e a origem continua desconhecida. As descrições dos subtipos são interpretação nossa.</p>
   </div>
 </section>
+
+</div>
+
+<div id="focus" hidden>
+  <div id="fcirc" aria-label="Círculo: deslize para cima ou para baixo para trocar de subtipo, para a direita para voltar"></div>
+  <div id="fpanel">
+    <div class="fbar"><button class="btn" id="back" type="button">← Voltar ao círculo</button><span class="hint" id="hint"></span></div>
+    <p class="sr" id="fsr" aria-live="polite"></p>
+    <div class="cols" id="cols"></div>
+    <div class="fintro"><p class="eyebrow">Os quatro elementos</p><h2>Os temperamentos e seus subtipos</h2><p class="lead">Cada temperamento tem uma base e três formas. A do centro é neutra e as outras duas se inclinam para um vizinho. O subtipo deseja algo do vizinho, mas a pessoa precisa lembrar sempre da sua base.</p></div>
+  </div>
+</div>
 
 <footer><div class="wrap">Morg Elements · estudo aberto sobre os quatro temperamentos.</div></footer>
 
@@ -489,11 +558,10 @@ const REFS = [
 ];
 
 /* ---------- Cards ---------- */
-const cols = document.getElementById('cols'), jump = document.getElementById('jump');
+const cols = document.getElementById('cols');
 const subId = (t,s) => `${t.id}-${slug(s.nome)}`;
 T.forEach(t=>{
   const c = EL[t.el].cor;
-  jump.insertAdjacentHTML('beforeend', `<a href="#${t.id}" style="--c:${c}"><i></i>${t.nome}</a>`);
   const subs = t.subs.map(s=>{
     const sc = subCor(s);
     const rows = [['Traços',s.tracos],['No trabalho',s.trabalho],['Nas relações',s.relacoes],['No conflito',s.conflito],
@@ -550,29 +618,32 @@ const Q = [
 const gCore=document.getElementById('g-core'), gSec=document.getElementById('g-sectors'),
       gLines=document.getElementById('g-lines'), gLab=document.getElementById('g-labels');
 
+const sectors=[];
 Q.forEach((q,qi)=>{
   const c=EL[q.t.el].cor;
-  const core = el('path',{d:wedge(q.a,q.a+90,R_IN), class:'grow', style:`fill:color-mix(in oklab, ${c} 22%, var(--bg));--d:${2.3+qi*.15}s`},gCore);
+  const core = el('path',{d:wedge(q.a,q.a+90,R_IN), class:'grow core',tabindex:'0',role:'button','aria-label':`${q.t.nome}, ${q.t.elNome}`, style:`fill:color-mix(in oklab, ${c} 22%, var(--bg));--d:${2.3+qi*.15}s`},gCore);
   const qg=el('g',{class:'qs',style:`--bt:${BREATH[q.t.el]}s`},gSec);
   el('path',{d:annulus(q.a+1,q.a+89,R_OUT+7,R_OUT+15),class:'halo',style:`fill:${c};--bt:${BREATH[q.t.el]}s`},gCore);
+  core.addEventListener('click',()=>enter(qi,null));
+  core.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();enter(qi,null)}});
   const [tx,ty]=P(80,q.a+45);
   const lab=el('g',{class:'fade',style:`--d:${4.6+qi*.12}s`},gLab);
-  el('text',{x:tx,y:ty-2,'text-anchor':'middle',class:'tname'},lab).textContent=q.t.nome;
-  el('text',{x:tx,y:ty+15,'text-anchor':'middle',class:'tel'},lab).textContent=q.t.elNome;
+  el('text',{x:tx,y:ty-2,'text-anchor':'middle',class:'tname','data-cx':tx,'data-cy':ty+6},lab).textContent=q.t.nome;
+  el('text',{x:tx,y:ty+15,'text-anchor':'middle',class:'tel','data-cx':tx,'data-cy':ty+6},lab).textContent=q.t.elNome;
 
   q.order.forEach((nm,si)=>{
     const s=q.t.subs.find(x=>x.nome===nm);
     const a0=q.a+si*30, a1=a0+30;
     const fill = subCor(s);
-    const p=el('path',{d:annulus(a0,a1,R_IN,R_OUT),class:'sector fade',tabindex:'0',role:'link',
+    const p=el('path',{d:annulus(a0,a1,R_IN,R_OUT),class:'sector fade',tabindex:'0',role:'button',
       'aria-label':`${s.nome}, ${q.t.nome}${s.viz?' perto do '+s.vizNome:' neutro'}`,
       style:`fill:${fill};--d:${3.0+qi*.25+si*.08}s`},qg);
-    const go=()=>{const target=document.getElementById(subId(q.t,s));target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-      target.open=true;target.classList.add('hl');setTimeout(()=>target.classList.remove('hl'),1800)};
+    sectors.push(p);
+    const go=()=>enter(qi,si);
     p.addEventListener('click',go);
     p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
     const [lx,ly]=P((R_IN+R_OUT)/2,a0+15);
-    el('text',{x:lx,y:ly+4.5,'text-anchor':'middle',class:'sub fade','pointer-events':'none',
+    el('text',{x:lx,y:ly+4.5,'text-anchor':'middle',class:'sub fade','pointer-events':'none','data-cx':lx,'data-cy':ly,
       style:`fill:var(--on);--d:${4.1+qi*.2+si*.1}s`},gLab).textContent=nm;
   });
 });
@@ -591,7 +662,7 @@ el('line',{x1:-238,y1:0,x2:238,y2:0,class:'axis draw',pathLength:1,style:'--d:1.
 // Axis labels
 const ax=[['Expansivos',0,-252,0],['Não expansivos',0,262,0],['Marcados',252,0,90],['Não marcados',-252,0,-90]];
 ax.forEach(([t,x,y,rot],i)=>{
-  el('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',class:'axl fade',transform:`rotate(${rot} ${x} ${y})`,style:`--d:${5.2+i*.15}s`},gLab).textContent=t;
+  el('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle',class:'axl fade',transform:`rotate(${rot} ${x} ${y})`,'data-cx':x,'data-cy':y,'data-base':rot,style:`--d:${5.2+i*.15}s`},gLab).textContent=t;
 });
 
 const svg=document.getElementById('circle');
@@ -603,7 +674,7 @@ document.getElementById('replay').addEventListener('click',()=>{svg.scrollIntoVi
 
 /* ---------- Revelação com o scroll ---------- */
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-const rvSel = ['section h2','section .lead','.jump','.card','.prose','.tblw','.timeline li','.refs li','.note'];
+const rvSel = ['section h2','section .lead','.prose','.tblw','.timeline li','.refs li','.note'];
 document.querySelectorAll(rvSel.join(',')).forEach(n=>{
   n.classList.add('rv');
   const sib=[...n.parentElement.children].filter(x=>x.matches(rvSel.join(','))&&x.tagName===n.tagName);
@@ -611,8 +682,6 @@ document.querySelectorAll(rvSel.join(',')).forEach(n=>{
 });
 const rvIO = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvIO.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.rv').forEach(n=>rvIO.observe(n));
-// Um link para uma âncora (referência, subtipo) mostra o alvo na hora.
-addEventListener('hashchange',()=>{const t=document.querySelector(location.hash);t&&t.closest('.rv')?.classList.add('in')});
 
 /* ---------- Efeito do elemento no topo de cada card ---------- */
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -672,4 +741,99 @@ fxList.forEach(f=>{fxSize(f);fxCol(f);fxIO.observe(f.cv);ro.observe(f.cv)});
 if(reduce.matches)fxStill();
 reduce.addEventListener('change',()=>reduce.matches?fxStill():kick());
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{fxList.forEach(fxCol);if(reduce.matches)fxStill()});
+
+/* ---------- Navegação: o círculo vai para o canto e o card aparece ao lado ---------- */
+history.scrollRestoration='manual';
+const body=document.body, stage=document.querySelector('.stage'), fcirc=document.getElementById('fcirc'),
+      focusEl=document.getElementById('focus'), fpanel=document.getElementById('fpanel'),
+      rotG=document.getElementById('rot'), selPath=document.getElementById('selpath'), fsr=document.getElementById('fsr');
+const labs=[...gLab.querySelectorAll('text')];
+const SEQ=[]; Q.forEach((q,qi)=>q.order.forEach((nm,si)=>SEQ.push([qi,si])));
+const touchy=matchMedia('(pointer: coarse)').matches;
+document.getElementById('hint').textContent = touchy
+  ? 'No círculo: deslize ↑ ↓ para trocar, → para voltar.'
+  : 'Role sobre o círculo ou use ↑ ↓ para trocar. Esc volta.';
+
+let theta=0, tAnim=0, cur=null, lastFocus=null;
+const setTheta=t=>{theta=t; rotG.setAttribute('transform',`rotate(${t})`);
+  labs.forEach(n=>n.setAttribute('transform',`rotate(${(+n.dataset.base||0)-t} ${n.dataset.cx} ${n.dataset.cy})`))};
+const turnTo=target=>{const d=((target-theta)%360+540)%360-180, from=theta;
+  cancelAnimationFrame(tAnim);
+  if(reduce.matches||Math.abs(d)<.01){setTheta(from+d);return}
+  const t0=performance.now(), dur=Math.min(750,280+Math.abs(d)*3.5);
+  const stepA=now=>{const k=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-k,3); setTheta(from+d*e); if(k<1) tAnim=requestAnimationFrame(stepA)};
+  tAnim=requestAnimationFrame(stepA)};
+const angleOf=(qi,si)=>Q[qi].a+(si==null?45:si*30+15);
+const panelTo=(y,smooth)=>fpanel.scrollTo({top:Math.max(0,y),behavior:smooth&&!reduce.matches?'smooth':'auto'});
+
+function show(qi,si){
+  const q=Q[qi], changed=!cur||cur.qi!==qi; cur={qi,si};
+  turnTo(90-angleOf(qi,si));                          // a seta fica à direita (90°)
+  selPath.setAttribute('d', si==null ? wedge(q.a,q.a+90,R_OUT) : annulus(q.a+si*30,q.a+si*30+30,R_IN,R_OUT));
+  sectors.forEach((p,i)=>p.classList.toggle('dim', si==null ? SEQ[i][0]!==qi : !(SEQ[i][0]===qi&&SEQ[i][1]===si)));
+  document.querySelectorAll('#cols .card').forEach(c=>c.classList.toggle('on',c.id===q.t.id));
+  const card=document.getElementById(q.t.id);
+  card.querySelectorAll('details.sub').forEach(d=>{d.open=false;d.classList.remove('sel')});
+  if(changed) panelTo(0,false);
+  if(si==null){ panelTo(0,true); fsr.textContent=`${q.t.nome}, ${q.t.elNome}`; return }
+  const s=q.t.subs.find(x=>x.nome===q.order[si]), d=document.getElementById(subId(q.t,s));
+  d.open=true; d.classList.add('sel');
+  fsr.textContent=`${s.nome}, ${q.t.nome}${s.viz?', perto do '+s.vizNome:', neutro'}`;
+  requestAnimationFrame(()=>panelTo(d.getBoundingClientRect().top-fpanel.getBoundingClientRect().top+fpanel.scrollTop-document.querySelector('.fbar').offsetHeight-8,true));
+}
+const stepBy=n=>{if(!cur)return; let i=SEQ.findIndex(([a,b])=>a===cur.qi&&b===(cur.si??1)); i=((i+n)%12+12)%12; show(...SEQ[i])};
+
+const flip=fn=>{const a=svg.getBoundingClientRect(); fn(); const b=svg.getBoundingClientRect();
+  if(reduce.matches||!b.width) return;
+  svg.animate([{transformOrigin:'0 0',transform:`translate(${a.left-b.left}px,${a.top-b.top}px) scale(${a.width/b.width})`},
+               {transformOrigin:'0 0',transform:'none'}],{duration:650,easing:'cubic-bezier(.2,.8,.2,1)'})};
+function enter(qi,si){
+  if(!body.classList.contains('focus')){
+    lastFocus=document.activeElement;
+    svg.classList.remove('play'); clearTimeout(aliveT); svg.classList.add('alive');   // a entrada não se repete
+    flip(()=>{focusEl.hidden=false; fcirc.appendChild(svg); body.classList.add('focus')});
+    history.pushState({focus:1},'');
+    document.getElementById('back').focus({preventScroll:true});
+  }
+  show(qi,si);
+}
+function leave(fromPop){
+  if(!body.classList.contains('focus')) return;
+  flip(()=>{stage.insertBefore(svg,stage.firstChild); body.classList.remove('focus'); focusEl.hidden=true});
+  cur=null; selPath.setAttribute('d',''); sectors.forEach(p=>p.classList.remove('dim')); turnTo(0);
+  if(!fromPop && history.state && history.state.focus) history.back();
+  if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+}
+addEventListener('popstate',()=>leave(true));
+document.getElementById('back').addEventListener('click',()=>leave());
+document.addEventListener('keydown',e=>{
+  if(!body.classList.contains('focus')) return;
+  if(e.key==='Escape'){e.preventDefault();leave();return}
+  if((e.key==='ArrowDown'||e.key==='ArrowUp') && !fpanel.contains(document.activeElement)){e.preventDefault();stepBy(e.key==='ArrowDown'?1:-1)}
+});
+// Gestos no círculo: para baixo = sentido horário, para cima = anti-horário, para a direita = voltar.
+let g0=null, eatClick=false;
+fcirc.addEventListener('pointerdown',e=>{g0={x:e.clientX,y:e.clientY}});
+addEventListener('pointercancel',()=>{g0=null});
+addEventListener('pointerup',e=>{if(!g0)return; const dx=e.clientX-g0.x, dy=e.clientY-g0.y; g0=null;
+  if(dx>60 && dx>Math.abs(dy)*1.3){eatClick=true; leave()}
+  else if(Math.abs(dy)>30 && Math.abs(dy)>Math.abs(dx)){eatClick=true; stepBy(Math.sign(dy)*Math.max(1,Math.min(5,Math.round(Math.abs(dy)/110))))}
+  setTimeout(()=>{eatClick=false},0)});
+fcirc.addEventListener('click',e=>{if(eatClick){e.stopPropagation();e.preventDefault()}},true);
+let wAcc=0, wT=0;
+fcirc.addEventListener('wheel',e=>{e.preventDefault(); wAcc+=e.deltaY; const now=performance.now();
+  if(Math.abs(wAcc)>40 && now-wT>300){stepBy(wAcc>0?1:-1); wAcc=0; wT=now}},{passive:false});
+
+/* ---------- Toggles: eixos e fontes ---------- */
+const openPanel=(id,on)=>document.querySelectorAll('.tg').forEach(b=>{const me=on&&b.dataset.p===id;
+  b.setAttribute('aria-expanded',me); document.getElementById('p-'+b.dataset.p).hidden=!me});
+document.querySelectorAll('.tg').forEach(b=>b.addEventListener('click',()=>openPanel(b.dataset.p,b.getAttribute('aria-expanded')!=='true')));
+// Um número de referência leva às fontes, de qualquer lugar da página.
+const goRef=id=>{const t=document.getElementById(id); if(!t) return;
+  openPanel('fontes',true); t.classList.add('in');
+  requestAnimationFrame(()=>{t.scrollIntoView({block:'center',behavior:reduce.matches?'auto':'smooth'});
+    t.classList.add('hit'); setTimeout(()=>t.classList.remove('hit'),2600)})};
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#ref"]'); if(!a) return;
+  e.preventDefault(); leave(); goRef(a.getAttribute('href').slice(1))});
+if(/^#ref\d+$/.test(location.hash)) goRef(location.hash.slice(1));
 </script>
