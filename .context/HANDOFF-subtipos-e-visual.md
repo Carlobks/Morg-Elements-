@@ -2,55 +2,58 @@
 
 ## Objetivo
 
-Terminar a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ. O projeto termina quando a fase 3 (visual) estiver pronta.
-Estado: fases 2 e 3 e revisão com a humanizer concluídas e publicadas (2026-11-25). O projeto está encerrado; só voltar aqui se o dono pedir ajustes.
+Polir a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ (republicar sempre pelo mesmo `file_path`).
+Passo em curso: plano do polimento aprovado pelo dono (seção «Próximos passos»). Nenhum código dele foi escrito ainda.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
-Commits: `92ab8c9` (pesquisa inicial e página), `810cc85` (skill humanizer 2.1.1), `3adadc5` (skill passando-o-trabalho). Os dois primeiros já estão no remoto; o push funcionou depois que o dono instalou o app do Claude no GitHub.
+Commits: `4094219` (fase 2, subtipos), `f2566d4` (fase 3, visual), `3592094` (humanizer), `1141ae7` (navegação pelo círculo), `85284bf` (ajustes do celular). Todos no remoto. `git status -s`: limpo.
 
 | Caminho | Status | O que é |
 |---|---|---|
-| `index.html` | limpo | Página: círculo SVG animado (JS monta setores), 4 cards, tabela dos eixos, linha do tempo, referências. Dados em `const T` e `const REFS` no script. `R_OUT=206`, `R_IN=128`, token `--on` para o texto sobre os setores. |
+| `index.html` | limpo | Página inteira (CSS, HTML e JS num arquivo). Dados em `const T`, `const SUB`, `const REFS`. |
 | `docs/pesquisa.md` | limpo | Anotações e 12 referências com estado de verificação. |
-| `README.md` | limpo | Descrição curta. |
-| `.claude/skills/humanizer/` | limpo | Versão 2.1.1 (commit `d8085c7^` de blader/humanizer), com LICENSE MIT. |
-| `.claude/skills/passando-o-trabalho/` | limpo | Cópia de Carlobks/Morg-laws (`2325c49`), com LICENSE CC BY 4.0. |
+| `.claude/skills/humanizer/`, `.claude/skills/passando-o-trabalho/` | limpo | Skills instaladas (MIT e CC BY 4.0). |
 
-Testes: não há suíte. Na sessão, uma checagem com Playwright em 1300 px (claro) e 400 px (escuro) não mostrou overflow nem erros de console.
+Como a página funciona hoje (verificado no código e no teste):
+- Página inicial: título, `#circle` (SVG; o grupo `#rot` gira; `#pointer` fixo a 90°), legenda, «Rever a animação», toggles `.tg` «Os eixos» (`#p-eixos`) e «As fontes» (`#p-fontes`), rodapé.
+- Toque num setor ou no núcleo chama `enter(qi,si)`: o SVG vai para `#fcirc` (coluna esquerda da camada `#focus`, com `.fback` e `.fhint`), `show()` (linha ~786) gira, marca `#selpath` e mostra o card em `#fpanel`. Gestos: para baixo/cima troca (`stepBy`), para a direita volta (`leave`). Roda, ↑ ↓ e Esc no computador.
+- Card (template em `cols.insertAdjacentHTML`, linha ~590): `canvas.fx` (banner), `.top` com `<div class="el">` (linha 595) e `<h3>`, `.chips`, resumo, `details.more` «Mais sobre o …», bloco com `<h4>Subtipos</h4>` (linha 609), `.hint1`, `.subs`. `.card.one` = só um subtipo visível.
+- Efeitos: objeto `FX` (fogo, agua, terra, ar com `n`, `make`, `step`, `bg`, `draw`); `fxList` (linha 737) a partir de `canvas.fx`; `loop` (linha 750) só desenha os visíveis; `fxStill()` no movimento reduzido.
+
+Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 escuro e 1300 px claro: toque em subtipo e no centro, gestos, voltar, toggle «Mais sobre», referência. Último resultado: `errs []`, `overflow false`.
 
 ## Decisões e porquê
 
 - Círculo: expansivos em cima, marcados à direita. Sanguíneo/Ar em cima à esquerda, Colérico/Fogo em cima à direita, Melancólico/Terra embaixo à direita, Fleumático/Água embaixo à esquerda (dono).
-- Subtipos (dono): Fogo, faísca (perto do sanguíneo), brasa (perto do melancólico). Água, vapor (perto do sanguíneo), gelo (perto do melancólico). Terra, argila (perto do fleumático), pedra (perto do colérico). Ar, brisa (perto do fleumático), vento (perto do colérico). O neutro fica no centro e não existe subtipo na direção do oposto.
-- Regra dos subtipos (dono): o subtipo deseja algo do vizinho, mas sempre lembra da base.
-- Só fontes primárias, cada uma com estado de verificação. O esquema dos subtipos não tem fonte e aparece como hipótese do projeto (dono).
-- Título: basta dizer que nada aqui deve ser levado como verdade (dono).
-- Repositório público: nada pessoal do dono.
-- Humanizer: usar a versão 2.1.1. Sem fontes ou exemplos inventados. Voz e opinião só nos textos dos subtipos; eixos, linha do tempo e referências ficam neutros (plano aprovado).
-- Fase 2 aprovada: cada um dos 12 subtipos com imagem do elemento, traços, trabalho, relacionamentos, conflito, busca (só os não neutros), quando exagera, lembrar da base e equilíbrio. Uma tabela por temperamento compara os 3 subtipos (conflito, quando exagera). Cada subtipo abre como `<details>` ao toque, e o toque no círculo abre e destaca o subtipo.
-- Fase 3 aprovada: blocos aparecendo com o scroll (IntersectionObserver, nada escondido sem JS), efeito do elemento num canvas no topo de cada card (faíscas, ondas, grãos, linhas de vento), ícone SVG animado por subtipo, círculo "respirando" por quadrante (fogo rápido, terra lento), cores próprias e mais vivas por subtipo, nomes do centro maiores (viewBox menor, cerca de -270..270), prefers-reduced-motion deixa tudo parado.
-- Cores dos subtipos (rascunho, não verificado): Faísca #ef8b25, Fogo #d9481c, Brasa #9e2f1c, Vento #a35fc4, Ar #7f73d6, Brisa #8c95e0, Vapor #5b9fd1, Água #2479a8, Gelo #3d97a8, Argila #a8744f, Terra #8d6a35, Pedra #6e6a64.
+- Subtipos: Fogo (faísca, brasa), Água (vapor, gelo), Terra (argila, pedra), Ar (brisa, vento); neutro no centro; nenhum na direção do oposto; o subtipo deseja algo do vizinho e lembra sempre da base (dono). Esquema sem fonte, marcado como hipótese.
+- Só fontes primárias, com estado de verificação. Título: nada aqui deve ser levado como verdade. Repositório público: nada pessoal do dono.
+- Texto: não se altera sem pedido explícito do dono. A linha Humor saiu dos cards a pedido dele (o dado `humor` continua em `T`). Humanizer 2.1.1 em todo texto novo.
+- Navegação (dono): página inicial só com o círculo; card ao lado; seta fixa à direita; para baixo = Faísca → Fogo → Brasa → Pedra…; celular mostra 36% do círculo na borda; Voltar e dica na coluna do círculo; card sem moldura; toggle «Mais sobre o …»; subtipo tocado aparece sozinho e aberto, centro mostra os três fechados; vale para celular e computador.
+- Cores dos subtipos: tokens `--s-*` nos dois temas, contraste ≥ 4,5 com `--on` (medido).
+- Polimento (dono): esconder «Subtipos» quando há um subtipo só (com os três, continua); título «Melancólico TERRA» na mesma linha, título primeiro; animação pelo caminho A, para os quatro elementos, mantendo o banner.
 
 ## Descartado
 
-- Abrir os textos originais (archive.org, rsarchive.org, wikisource, korpora.org, ellopos.net, pure.mpg.de, classics.mit.edu, psychclassics.yorku.ca): `getaddrinfo ENOTFOUND`. O dono recusou criar um ambiente com esses sites liberados, então não se propõe de novo.
-- Testar sites com curl em loop: o classificador do modo automático negou.
-- Cores dos subtipos por `color-mix` entre vizinhos: vento e faísca ficaram rosados e apagados. Usar cores próprias.
-- Texto branco fixo sobre os setores: ilegível no tema escuro. Usar o token `--on` ou um contorno.
+- Abrir os textos originais (archive.org, rsarchive.org, wikisource, korpora.org e outros): `getaddrinfo ENOTFOUND`. O dono recusou liberar a rede; não propor de novo.
+- Testar sites com curl em loop: negado pelo classificador.
+- Cores dos subtipos por `color-mix` entre vizinhos: rosadas e apagadas.
+- Texto branco fixo sobre os setores: ilegível no tema escuro (usar `--on`).
+- Animação caminho B (um canvas atrás da tela inteira, partículas passando da coluna ao banner): o banner rola e a coluna não, a continuidade quebra. Caminho C (tirar o banner): o dono quer o banner.
+- Print com `fullPage: true`: os canvas saem vazios (redimensiona antes do quadro). Usar print normal.
+- Teste de celular sem `<meta name="viewport">` abre a 980 px; a meta já está no arquivo.
+- Gesto ouvido só em `#fcirc`: o dedo sai da faixa estreita e o gesto se perde. O `pointerup` fica na janela.
 
-## Feito depois deste handoff
+## Próximos passos
 
-- Fase 2 (`4094219`): 12 subtipos em `const SUB`, cada um num `<details>`, tabela comparativa por temperamento, toque no círculo abre o subtipo.
-- Fase 3 (`f2566d4`): cores próprias `--s-*` nos dois temas (contraste ≥ 4,5 com `--on`), canvas por elemento no topo dos cards, ícones SVG animados, halo e brilho "respirando" por quadrante, revelação com o scroll, nomes do centro maiores (viewBox -276..276). Movimento reduzido deixa tudo parado.
-- Humanizer: negrito no meio das frases retirado de `docs/pesquisa.md`; textos novos já escritos seguindo a skill.
+Mexer só em `index.html` e só no que está abaixo. **Não tocar:** textos, dados (`T`, `SUB`, `REFS`), página inicial, toggles dos eixos e das fontes, gestos e teclas, cores, círculo e animação de entrada, banner do card (fica como está), `docs/pesquisa.md`.
 
-- Navegação pelo círculo (pedido do dono depois da fase 3): a página inicial mostra só o título, o círculo e dois toggles ("Os eixos" = tabela dos eixos e texto dos vizinhos; "As fontes" = linha do tempo e referências). Tocar num subtipo ou no nome do temperamento abre a camada `#focus`: o círculo vai para a esquerda (no celular só 36% dele aparece, encostado na borda), uma seta fixa à direita marca a seleção e o card do temperamento aparece ao lado, com o subtipo aberto. Deslizar para baixo = próximo no sentido horário (Faísca → Fogo → Brasa → Pedra…), para cima = anterior, para a direita = voltar. No computador: roda do mouse, ↑ ↓, Esc e o botão voltar do navegador. Um número de referência leva às fontes. Nenhum texto foi alterado.
-
-- Ajustes depois do teste no celular: sem destaque azul ao tocar (contorno só no teclado); botão redondo "Voltar" e dica curta na coluna do círculo; card sem moldura, com banner, elemento, título, tags e resumo, e o resto num toggle "Mais sobre o …" (a linha Humor saiu, Qualidades e Estação ficam no toggle); tocar num subtipo mostra só ele, aberto; tocar no centro mostra os três fechados. Vale para celular e computador.
-
-## Próximos passos (originais, todos feitos)
-
-1. Fase 2: escrever os 12 subtipos aprofundados no `const T` de `index.html` (campos: imagem, traços, trabalho, relações, conflito, busca, exagero, base, equilíbrio), com o `<details>` e a tabela comparativa. Escrever já seguindo `.claude/skills/humanizer/SKILL.md`.
-2. Fase 3: o visual descrito nas Decisões. Depois, um único print com Playwright (400 px escuro e 1300 px claro).
-3. Passar a humanizer em todo o texto de `index.html` e `docs/pesquisa.md`, publicar no mesmo artifact (mesmo `file_path`), commitar e dar push.
+1. «Subtipos» e título:
+   - No template do card, dar `class="subh"` ao `<h4>Subtipos</h4>` e esconder com `#fpanel .card.one .subh{display:none}`, como já se faz com `.hint1`.
+   - Em `.top`, pôr o `<h3>` antes do `<div class="el">` num contêiner `display:flex;align-items:baseline;gap:10px;flex-wrap:wrap`, para ler «Melancólico TERRA».
+2. Animação na coluna (caminho A):
+   - Novo `<canvas id="colfx" aria-hidden="true">` dentro de `#fcirc`, com `position:absolute;inset:0;z-index:0;pointer-events:none`; o SVG, `.fback` e `.fhint` com `position:relative;z-index:1`.
+   - Um objeto `colFx` à parte que reaproveita `FX[el]`; em `show()`, trocar o tipo e a cor (a cor de `.el` do card ativo) com transição de opacidade (~400 ms).
+   - Versão para coluna alta e estreita: fogo sobe da altura inteira; ar cruza a altura inteira; terra e água desenham o `bg` só numa faixa de ~90 px no pé (`ctx.translate(0,h-90)` com `h=90`). Alfa geral ~0,55 para manter Voltar, dica e nomes legíveis.
+   - Só anima com `body.focus`; parado no movimento reduzido (como `fxStill`); redimensionar com o `ResizeObserver` existente.
+3. Conferir com o `nav.js` (Pixel 5 escuro e 1300 px claro), olhar um print de cada, commitar, dar push e republicar no mesmo artifact.
