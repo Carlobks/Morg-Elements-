@@ -3,33 +3,32 @@
 ## Objetivo
 
 Auditar o projeto, guardar os testes e pôr as barreiras do Morg-laws, sem mudar visual, texto nem organização do texto.
-Passo em curso: F0 e F1 feitos; próximo, F2 (dividir o arquivo); o dono já deu o «sim» para o F2. Plano: `docs/planos/0001-auditoria.md`.
+Passo em curso: F0, F1 e F2 feitos; próximo, F3 (barreiras), que ainda pede o «sim» do dono. Plano: `docs/planos/0001-auditoria.md`.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
-Referência visual: `a1e33ad` (tela inicial, versão 10 do artifact https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ). `git status -s`: limpo antes deste handoff.
+Referência visual: `a1e33ad` (versão 10 do artifact https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ). Divisão do F2: `55a9635`. O artifact publicado é idêntico ao `index.html` de `a1e33ad` (conferido por `diff`; só uma linha em branco do invólucro); não foi republicado depois da divisão (isso é o F7).
 
 | Caminho | Status | O que é |
 |---|---|---|
-| `index.html` | limpo | 978 linhas: CSS, HTML e JS. Dados `T`, `SUB`, `REFS`; efeitos `FX`, `SUBFX`, `colFx`; navegação `enter`, `show`, `leave`. |
-| `docs/planos/0001-auditoria.md` | limpo | O plano, fases F0 a F7; F1 marcado. |
-| `package.json`, `package-lock.json` | novo | Só para testes: `@playwright/test` 1.63.0 exato. `npm test`. |
-| `playwright.config.js` | novo | 4 projetos (celular escuro/claro, pc claro/escuro), 4 workers, `globalSetup`. |
-| `tests/e2e/apoio.js` | novo | `MODOS`, `SEMENTE`, `REF_COMMIT='a1e33ad'`, `estados`, `texto`, `difPx`, `esperaFontes`. |
-| `tests/e2e/referencia.setup.js` | novo | `git archive a1e33ad` → `tests/.ref/` (ignorado). |
-| `tests/e2e/referencia.spec.js` | novo | 17 prints por modo + texto + erros + rolagem, contra a referência. |
-| `tests/e2e/navegacao.spec.js` | novo | Porte do `nav.js` com asserções, animação ligada. |
-| `.gitignore` | novo | `node_modules/`, `test-results/`, `playwright-report/`, `tests/.ref/`. |
-| `docs/pesquisa.md` | limpo | Pesquisa e 15 referências. |
+| `index.html` | limpo | 119 linhas: HTML, `<link>` das fontes e de `estilo.css`, e `<script src>` de `dados.js`, `efeitos.js`, `navegacao.js`, nesta ordem. |
+| `estilo.css` | limpo | 247 linhas: o CSS antigo, sem mudança. |
+| `dados.js` | limpo | 266 linhas: `EL`, `slug`, `ICO`, `icon`, `r`, `T`, `SUB`, `REFS`, montagem dos cards e da lista de fontes. |
+| `efeitos.js` | limpo | 251 linhas: desenho do círculo (`Q`, `play`), revelação (`reduce`, `rvIO`), `FX`, `SUBFX`, `colFx`, `fxList`, `loop`, `kick`. |
+| `navegacao.js` | limpo | 95 linhas: `SEQ`, `show`, `enter`, `leave`, `stepBy`, gestos, `openPanel`, `goRef`. |
+| `docs/planos/0001-auditoria.md` | alterado (vai neste commit) | F0, F1, F2 marcados; nova seção «Para depois da auditoria». |
+| `package.json`, `playwright.config.js`, `tests/e2e/*` | limpo | Os testes do F1 (ver o plano). |
 
-Testes: `npm test` → `8 passed (50.8s)`. Quebras de propósito: gesto invertido → só a navegação falha («para baixo»); título 1 px → só a referência falha (550 a 2203 px). Sem hooks (`core.hooksPath` vazio), sem CI (F3). O CI vai precisar de `fetch-depth: 0` para o `git archive a1e33ad`. Playwright 1.63.0 e Chromium pré-instalados no ambiente. Morg-laws clonado (só leitura) em `/home/user/carlobks/morg-laws` (modelos em `modelos/`).
+Prova do F2: os cinco arquivos juntados de volta (com `<style>`/`<script>` no lugar) = `index.html` antigo, `diff` vazio; `T`, `SUB`, `REFS` idênticos. `npm test` → `8 passed (58.1s)`. Sem `dados.js`, os testes ficam vermelhos (timeout no clique), então eles leem os arquivos novos.
 
 ## Decisões e porquê
 
-- Todas as do dono estão no plano, seção «Decisões do dono»: dividir o arquivo; Morg-laws proporcional; Playwright com testes pesados no pre-push e no CI (o CI não substitui o navegador, só muda onde roda); achados visuais só listados; ler em partes pequenas; clone de `a1e33ad` como referência.
-- Técnica: comparação de pixels exige quadro determinístico: movimento reduzido emulado e `Math.random` com semente fixa (via `addInitScript`) nas duas páginas.
-- Técnica: as fontes vêm do Google; uma rodada do F0 deu diferença falsa por fonte atrasada. O teste espera `document.fonts` antes de cada print e acusa «fonte não carregou». Limite: só o quadro parado é comparado; mudança só no movimento pode passar.
-- Regras que continuam: repositório público, nada pessoal; só fontes primárias; nada se altera sem o "sim" do dono.
+- Do dono, no plano («Decisões do dono»): dividir o arquivo; Morg-laws proporcional; Playwright no pre-push e no CI; achados visuais só listados; ler em partes pequenas; clone de `a1e33ad` como referência.
+- Do dono (F2, opção A): o desenho do círculo fica em `efeitos.js` e os cards em `dados.js`, para manter a ordem de execução original (os efeitos usam os cards e o `reduce`). A opção B (círculo em `navegacao.js`) mudaria a ordem.
+- Do dono: pedidos visuais anotados para depois da auditoria (plano, seção «Para depois da auditoria»): botão de tema, mudar o lugar do «Rever a animação», o texto abaixo do círculo não explica que ele é tocável, e fechar os painéis faz a página subir de forma abrupta. Nada disso se faz antes do fim da auditoria nem sem o «sim».
+- Técnica: comparação de pixels exige quadro determinístico (movimento reduzido emulado e `Math.random` com semente via `addInitScript`); o teste espera `document.fonts` antes de cada print. Limite: só o quadro parado é comparado.
+- O CI do F3 vai precisar de `fetch-depth: 0` para o `git archive a1e33ad`.
+- Regras que continuam: repositório público, nada pessoal; só fontes primárias; nada se altera sem o «sim» do dono.
 
 ## Descartado
 
@@ -37,8 +36,9 @@ Testes: `npm test` → `8 passed (50.8s)`. Quebras de propósito: gesto invertid
 - Print com `fullPage: true`: canvas saem vazios.
 - Guardar prints PNG no repositório como referência: desnecessário, o teste renderiza o clone de `a1e33ad` na hora.
 - Hooks do Claude e `AGENTS.md`: fora da versão proporcional (dono).
+- Republicar o artifact com os cinco arquivos antes do F7: fica para o F7.
 
 ## Próximos passos
 
-1. F2: dividir `index.html` em `index.html`, `estilo.css`, `dados.js`, `efeitos.js`, `navegacao.js` (<500 linhas cada), lendo em partes pequenas; prova: `npm test` verde e dados idênticos por `diff`. «Sim» do dono já dado.
-2. F3 e seguintes conforme o plano.
+1. Pedir o «sim» do dono para o F3 (barreiras: `.githooks/`, `scripts/portoes/`, testes Python, `.github/workflows/ci.yml` com `fetch-depth: 0`), modelos em `/home/user/carlobks/morg-laws/modelos/` (clone só leitura; reclonar se a sessão for nova).
+2. F4 a F7 conforme o plano.
