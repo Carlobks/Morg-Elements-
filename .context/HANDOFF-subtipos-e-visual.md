@@ -3,7 +3,7 @@
 ## Objetivo
 
 Polir a página dos quatro temperamentos (`index.html`), publicada como artifact em https://claude.ai/artifact/SGPyWPBjHribgfeVFXvZsJ (republicar sempre pelo mesmo `file_path`).
-Passo em curso: animação da coluna por subtipo (versão 9, tabela `SUBFX`); depois, auditoria curta (dono: «subtipos primeiro»).
+Passo em curso: tela inicial refeita (versão 10); próximo, auditoria curta.
 
 ## Estado verificado (2026-11-25, ramo claude/temperamentos-elementos-qtbc9x)
 
@@ -34,6 +34,7 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 - Cores dos subtipos: tokens `--s-*` nos dois temas, contraste ≥ 4,5 com `--on` (medido).
 - Coluna (dono): fogo e ar aprovados; água = bolhas subindo devagar (`colFx.bolha`). Terra = ideia A + rachaduras de B (dono), apoiada em Aristóteles [13][14] em `docs/pesquisa.md` 2.4: poucos grãos caem pesados (`colFx.grao`), viram camadas no pé (`colFx.sedimento`, limite abaixo de `#hint`), as antigas racham em rede (`colFx.racha`), repousam 2,5 s, compactam e recomeçam; `#colfx.on.terra{opacity:.8}`. Banner intocado.
 - Subtipos na coluna (dono aprovou a tabela): `SUBFX[el][sub]` com parâmetros que `colFx.ease()` aproxima a cada quadro; `colFx.set(card, nomeDoSubtipo)` em `show()`; centro = base. Pesquisa em `docs/pesquisa.md` 2.5, refs [13][14][15].
+- Tela inicial (dono): «Morg Elements» pequeno no topo (`h1.brand`, sem ponto); abaixo, os temperamentos na ordem do círculo (Sanguíneo, Colérico, Melancólico, Fleumático) em `.temps`, cor do texto com só um sublinhado fino na cor do elemento («para não virar um carnaval»); celular em 2 × 2 na posição do círculo. Aviso intocado.
 - Auditoria (dono): depois dos subtipos, curta e proporcional: versionar o teste (`nav.js` só existe no scratchpad), um hook (sintaxe JS e dados pessoais), sem catracas; ler o Morg-laws antes.
 - Polimento (dono): esconder «Subtipos» quando há um subtipo só (com os três, continua); título «Melancólico TERRA» na mesma linha, título primeiro; animação pelo caminho A, para os quatro elementos, mantendo o banner.
 
@@ -52,5 +53,5 @@ Teste: script Playwright no scratchpad (`nav.js`, não versionado) em Pixel 5 es
 
 ## Próximos passos
 
-1. Esperar o retorno do dono sobre a versão 9 (animação por subtipo). Ajustes ficam em `SUBFX`.
+1. Esperar o retorno do dono sobre a versão 10 (tela inicial). Animação por subtipo: ajustes em `SUBFX`.
 2. Auditoria curta: ler o Morg-laws (`modelos/`), versionar o teste de navegação do scratchpad no repositório, propor um hook (sintaxe JS e dados pessoais) e conferir desempenho e acessibilidade. Perguntar antes de criar.
