@@ -47,6 +47,8 @@ Testes: não há suíte. Na sessão, uma checagem com Playwright em 1300 px (cla
 
 - Navegação pelo círculo (pedido do dono depois da fase 3): a página inicial mostra só o título, o círculo e dois toggles ("Os eixos" = tabela dos eixos e texto dos vizinhos; "As fontes" = linha do tempo e referências). Tocar num subtipo ou no nome do temperamento abre a camada `#focus`: o círculo vai para a esquerda (no celular só 36% dele aparece, encostado na borda), uma seta fixa à direita marca a seleção e o card do temperamento aparece ao lado, com o subtipo aberto. Deslizar para baixo = próximo no sentido horário (Faísca → Fogo → Brasa → Pedra…), para cima = anterior, para a direita = voltar. No computador: roda do mouse, ↑ ↓, Esc e o botão voltar do navegador. Um número de referência leva às fontes. Nenhum texto foi alterado.
 
+- Ajustes depois do teste no celular: sem destaque azul ao tocar (contorno só no teclado); botão redondo "Voltar" e dica curta na coluna do círculo; card sem moldura, com banner, elemento, título, tags e resumo, e o resto num toggle "Mais sobre o …" (a linha Humor saiu, Qualidades e Estação ficam no toggle); tocar num subtipo mostra só ele, aberto; tocar no centro mostra os três fechados. Vale para celular e computador.
+
 ## Próximos passos (originais, todos feitos)
 
 1. Fase 2: escrever os 12 subtipos aprofundados no `const T` de `index.html` (campos: imagem, traços, trabalho, relações, conflito, busca, exagero, base, equilíbrio), com o `<details>` e a tabela comparativa. Escrever já seguindo `.claude/skills/humanizer/SKILL.md`.

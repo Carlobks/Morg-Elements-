@@ -32,6 +32,8 @@ a{color:inherit}
 sup.r a{font-family:var(--mono);font-size:.68em;color:var(--muted);text-decoration:none;padding:0 1px}
 sup.r a:hover,sup.r a:focus-visible{color:var(--fg);text-decoration:underline}
 :focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+*{-webkit-tap-highlight-color:transparent}
+:focus:not(:focus-visible){outline:none}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 
 /* Hero */
@@ -146,27 +148,38 @@ body.focus #circle .sector.dim{filter:saturate(.35) opacity(.5)}
 body.focus{overflow:hidden}
 #focus{position:fixed;inset:0;z-index:30;background:var(--bg);--cw:min(46vw,560px)}
 #focus[hidden]{display:none}
-#fcirc{position:absolute;top:0;bottom:0;left:0;width:var(--cw);display:flex;align-items:center;justify-content:center;touch-action:none;overscroll-behavior:contain;user-select:none;-webkit-user-select:none}
-#fcirc #circle{width:calc(var(--cw) - 48px);max-width:none}
-#fpanel{position:absolute;top:0;bottom:0;right:0;left:var(--cw);overflow-y:auto;overscroll-behavior:contain;padding:0 max(16px,env(safe-area-inset-right,0px)) 56px 12px;animation:fin .5s ease both}
+#fcirc{position:absolute;top:0;bottom:0;left:0;width:var(--cw);display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;touch-action:none;overscroll-behavior:contain;user-select:none;-webkit-user-select:none}
+#fcirc #circle{width:min(calc(var(--cw) - 48px),calc(100vh - 230px));max-width:none;flex:none}
+.fback{display:flex;flex-direction:column;align-items:center;gap:2px;font:500 12.5px var(--body);color:var(--fg);background:none;border:0;padding:4px;cursor:pointer}
+.fback .arr{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:20px;line-height:1;transition:border-color .2s}
+.fback:hover .arr{border-color:var(--fg)}
+.fhint{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--muted);text-align:center;margin:0}
+#fpanel{position:absolute;top:0;bottom:0;right:0;left:var(--cw);overflow-y:auto;overscroll-behavior:contain;padding:0 0 56px;animation:fin .5s ease both;--pl:16px;--pr:max(16px,env(safe-area-inset-right,0px))}
 @keyframes fin{from{opacity:0;transform:translateX(18px)}}
-.fbar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:14px 0 12px;background:linear-gradient(var(--bg) 75%,transparent)}
-.fbar .hint{font-size:12.5px;color:var(--muted)}
-#fpanel .cols{display:block;max-width:680px;margin:4px 0 0}
-#fpanel .card{display:none}
+#fpanel .cols{display:block;max-width:760px;margin:0}
+#fpanel .card{display:none;background:none;border:0;border-radius:0;overflow:visible}
+#fpanel .card .top{padding:16px var(--pr) 12px var(--pl)}
+#fpanel .card .body{padding:0 var(--pr) 16px var(--pl)}
+#fpanel .sub{border:0;border-left:4px solid var(--sc);border-radius:0;padding:4px 0 4px 12px}
+#fpanel .sub.sel{background:none;box-shadow:none}
+#fpanel .card.one .hint1{display:none}
+.more{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.more summary{list-style:none;cursor:pointer;position:relative;padding:12px 26px 12px 0;font-family:var(--display);font-size:1.15rem}
+.more summary::-webkit-details-marker{display:none}
+.more summary::after{content:"";position:absolute;right:4px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .25s}
+.more[open] summary::after{transform:rotate(225deg);margin-top:-2px}
+.morein{display:flex;flex-direction:column;gap:14px;padding:2px 0 16px}
 #fpanel .card.on{display:block}
-.fintro{max-width:680px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.fintro{max-width:760px;margin:22px var(--pr) 0 var(--pl);padding-top:14px;border-top:1px solid var(--line)}
 .fintro h2{font-size:1.35rem;margin-top:4px}
 .fintro .lead{font-size:14px}
 .sub.sel{background:color-mix(in oklab,var(--sc) 11%,transparent);box-shadow:0 0 0 1px var(--sc)}
 @media (max-width:899px){
   #focus{--sz:min(78vw,310px);--cw:calc(var(--sz) * .36)}
-  #fcirc{justify-content:flex-start;overflow:hidden}
-  #fcirc #circle{width:var(--sz);flex:none;margin-left:calc(var(--sz) * -.64)}
-  #fpanel{padding-left:8px}
-  #fpanel .card .top{padding:14px 14px 12px}
-  #fpanel .card .body{padding:0 14px 16px}
-  #fpanel .sub{padding:10px 10px}
+  #fcirc{align-items:flex-start;overflow:hidden}
+  #fcirc #circle{width:var(--sz);margin-left:calc(var(--sz) * -.64)}
+  .fback,.fhint{align-self:stretch}
+  #fpanel{--pl:10px}
 }
 /* Toggles abaixo do círculo */
 .tgl{padding-block:0 28px}
@@ -321,9 +334,11 @@ body.focus{overflow:hidden}
 </div>
 
 <div id="focus" hidden>
-  <div id="fcirc" aria-label="Círculo: deslize para cima ou para baixo para trocar de subtipo, para a direita para voltar"></div>
+  <div id="fcirc" aria-label="Círculo: deslize para cima ou para baixo para trocar de subtipo, para a direita para voltar">
+    <button class="fback" id="back" type="button" aria-label="Voltar ao círculo"><span class="arr" aria-hidden="true">←</span><span>Voltar</span></button>
+    <p class="fhint" id="hint"></p>
+  </div>
   <div id="fpanel">
-    <div class="fbar"><button class="btn" id="back" type="button">← Voltar ao círculo</button><span class="hint" id="hint"></span></div>
     <p class="sr" id="fsr" aria-live="polite"></p>
     <div class="cols" id="cols"></div>
     <div class="fintro"><p class="eyebrow">Os quatro elementos</p><h2>Os temperamentos e seus subtipos</h2><p class="lead">Cada temperamento tem uma base e três formas. A do centro é neutra e as outras duas se inclinam para um vizinho. O subtipo deseja algo do vizinho, mas a pessoa precisa lembrar sempre da sua base.</p></div>
@@ -583,13 +598,15 @@ T.forEach(t=>{
     </div>
     <div class="body">
       <p>${t.resumo}</p>
-      <div class="fa"><b>Humor</b><span>${t.humor}${r(2)}</span><b>Qualidades</b><span>${t.quali}${r(3)}</span><b>Estação</b><span>${t.est}${r(2)}</span></div>
-      <div><h4>Como costuma agir</h4><ul>${t.age.map(a=>`<li>${a}</li>`).join('')}</ul></div>
-      <div class="fa"><b>Forças</b><span>${t.forcas}</span><b>Atenção</b><span>${t.atencao}</span></div>
-      <p class="src">${t.fontes}</p>
-      <div><h4>Subtipos</h4><p class="src" style="margin-top:4px">Toque num subtipo para abrir. Hipótese do projeto, sem fonte.</p><div class="subs" style="margin-top:8px">${subs}</div></div>
-      <div><h4>Os três lado a lado</h4>${cmp}</div>
-      <p class="opp">Oposto na diagonal: <b>${t.oposto}</b>. Não há subtipo nessa direção.</p>
+      <details class="more"><summary>Mais sobre o ${t.nome}</summary><div class="morein">
+        <div class="fa"><b>Qualidades</b><span>${t.quali}${r(3)}</span><b>Estação</b><span>${t.est}${r(2)}</span></div>
+        <div><h4>Como costuma agir</h4><ul>${t.age.map(a=>`<li>${a}</li>`).join('')}</ul></div>
+        <div class="fa"><b>Forças</b><span>${t.forcas}</span><b>Atenção</b><span>${t.atencao}</span></div>
+        <p class="src">${t.fontes}</p>
+        <div><h4>Os três lado a lado</h4>${cmp}</div>
+        <p class="opp">Oposto na diagonal: <b>${t.oposto}</b>. Não há subtipo nessa direção.</p>
+      </div></details>
+      <div><h4>Subtipos</h4><p class="src hint1" style="margin-top:4px">Toque num subtipo para abrir. Hipótese do projeto, sem fonte.</p><div class="subs" style="margin-top:8px">${subs}</div></div>
     </div>
   </article>`);
 });
@@ -750,9 +767,9 @@ const body=document.body, stage=document.querySelector('.stage'), fcirc=document
 const labs=[...gLab.querySelectorAll('text')];
 const SEQ=[]; Q.forEach((q,qi)=>q.order.forEach((nm,si)=>SEQ.push([qi,si])));
 const touchy=matchMedia('(pointer: coarse)').matches;
-document.getElementById('hint').textContent = touchy
-  ? 'No círculo: deslize ↑ ↓ para trocar, → para voltar.'
-  : 'Role sobre o círculo ou use ↑ ↓ para trocar. Esc volta.';
+document.getElementById('hint').innerHTML = touchy
+  ? '<span>↑ ↓ troca</span><span>→ volta</span>'
+  : '<span>Role ou ↑ ↓ troca</span><span>Esc volta</span>';
 
 let theta=0, tAnim=0, cur=null, lastFocus=null;
 const setTheta=t=>{theta=t; rotG.setAttribute('transform',`rotate(${t})`);
@@ -773,13 +790,13 @@ function show(qi,si){
   sectors.forEach((p,i)=>p.classList.toggle('dim', si==null ? SEQ[i][0]!==qi : !(SEQ[i][0]===qi&&SEQ[i][1]===si)));
   document.querySelectorAll('#cols .card').forEach(c=>c.classList.toggle('on',c.id===q.t.id));
   const card=document.getElementById(q.t.id);
-  card.querySelectorAll('details.sub').forEach(d=>{d.open=false;d.classList.remove('sel')});
-  if(changed) panelTo(0,false);
-  if(si==null){ panelTo(0,true); fsr.textContent=`${q.t.nome}, ${q.t.elNome}`; return }
-  const s=q.t.subs.find(x=>x.nome===q.order[si]), d=document.getElementById(subId(q.t,s));
-  d.open=true; d.classList.add('sel');
+  if(changed){ card.querySelector('details.more').open=false; panelTo(0,false) } else panelTo(0,true);
+  const pick = si==null ? null : subId(q.t, q.t.subs.find(x=>x.nome===q.order[si]));
+  card.classList.toggle('one', si!=null);
+  card.querySelectorAll('details.sub').forEach(d=>{const me=d.id===pick; d.hidden=si!=null&&!me; d.open=me; d.classList.toggle('sel',me)});
+  if(si==null){ fsr.textContent=`${q.t.nome}, ${q.t.elNome}`; return }
+  const s=q.t.subs.find(x=>x.nome===q.order[si]);
   fsr.textContent=`${s.nome}, ${q.t.nome}${s.viz?', perto do '+s.vizNome:', neutro'}`;
-  requestAnimationFrame(()=>panelTo(d.getBoundingClientRect().top-fpanel.getBoundingClientRect().top+fpanel.scrollTop-document.querySelector('.fbar').offsetHeight-8,true));
 }
 const stepBy=n=>{if(!cur)return; let i=SEQ.findIndex(([a,b])=>a===cur.qi&&b===(cur.si??1)); i=((i+n)%12+12)%12; show(...SEQ[i])};
 
@@ -791,7 +808,7 @@ function enter(qi,si){
   if(!body.classList.contains('focus')){
     lastFocus=document.activeElement;
     svg.classList.remove('play'); clearTimeout(aliveT); svg.classList.add('alive');   // a entrada não se repete
-    flip(()=>{focusEl.hidden=false; fcirc.appendChild(svg); body.classList.add('focus')});
+    flip(()=>{focusEl.hidden=false; fcirc.insertBefore(svg,document.getElementById('hint')); body.classList.add('focus')});
     history.pushState({focus:1},'');
     document.getElementById('back').focus({preventScroll:true});
   }
