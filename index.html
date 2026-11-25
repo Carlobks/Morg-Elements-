@@ -9,16 +9,19 @@
   --bg:#eef0f2; --surface:#f8f9fa; --fg:#1b1f26; --muted:#5b6370; --line:#c9ced6;
   --fogo:#cf4f27; --ar:#8a7fd0; --agua:#2b7aa3; --terra:#8a6d3b;
   --on:#ffffff;
+  --s-faisca:#b35309;--s-fogo:#c0391a;--s-brasa:#8e2a19;--s-vento:#8a46ad;--s-ar:#6a5cc4;--s-brisa:#5866b8;--s-vapor:#2f75a8;--s-agua:#1f6a94;--s-gelo:#1b6f7c;--s-argila:#8f5a36;--s-terra:#765628;--s-pedra:#5f5b55;
   --display:"Marcellus","Cormorant Garamond",Georgia,serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#12151b; --surface:#1a1e26; --fg:#e7e9ee; --muted:#9aa2b0; --line:#323845;
-  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark}}
+  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark;
+  --s-faisca:#f5a04a;--s-fogo:#ee7046;--s-brasa:#d9634a;--s-vento:#c08ae0;--s-ar:#a79df0;--s-brisa:#b4bbf2;--s-vapor:#8cc3ea;--s-agua:#4fa3cf;--s-gelo:#6cc7d3;--s-argila:#d19a72;--s-terra:#c19a5b;--s-pedra:#a8a39b;}}
 :root[data-theme="dark"]{
   --bg:#12151b; --surface:#1a1e26; --fg:#e7e9ee; --muted:#9aa2b0; --line:#323845;
-  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark}
+  --fogo:#ee7046; --ar:#a79df0; --agua:#4fa3cf; --terra:#c19a5b; --on:#11141a; color-scheme:dark;
+  --s-faisca:#f5a04a;--s-fogo:#ee7046;--s-brasa:#d9634a;--s-vento:#c08ae0;--s-ar:#a79df0;--s-brisa:#b4bbf2;--s-vapor:#8cc3ea;--s-agua:#4fa3cf;--s-gelo:#6cc7d3;--s-argila:#d19a72;--s-terra:#c19a5b;--s-pedra:#a8a39b;}
 
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
 .wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -39,8 +42,8 @@ header.hero h1{font-size:clamp(2.4rem,7vw,4.2rem);letter-spacing:.06em}
 #circle{width:min(100%,620px);height:auto;overflow:visible}
 #circle text{font-family:var(--body);fill:var(--fg)}
 #circle .sub{font-size:13px;font-weight:500}
-#circle .tname{font-family:var(--display);font-size:16.5px}
-#circle .tel{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;fill:var(--muted);text-transform:uppercase}
+#circle .tname{font-family:var(--display);font-size:19px}
+#circle .tel{font-family:var(--mono);font-size:11px;letter-spacing:.14em;fill:var(--muted);text-transform:uppercase}
 #circle .axl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;fill:var(--muted)}
 #circle .ring{fill:none;stroke:var(--fg);stroke-width:1.6}
 #circle .axis{stroke:var(--fg);stroke-width:1.2}
@@ -71,7 +74,8 @@ section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.4rem)}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;margin-top:24px;align-items:start}
 @media (min-width:1150px){.cols{grid-template-columns:repeat(4,1fr)}}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0;scroll-margin-top:16px}
-.card .top{padding:18px 18px 14px;border-top:5px solid var(--c)}
+.card .fx{display:block;width:100%;height:68px;background:color-mix(in oklab,var(--c) 13%,var(--surface));border-bottom:2px solid var(--c)}
+.card .top{padding:16px 18px 14px}
 .card h3{font-size:1.75rem}
 .card .el{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -91,6 +95,7 @@ section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.4rem)}
 .sub[open] summary::after{transform:rotate(225deg);top:11px}
 .sub summary:focus-visible{outline:2px solid var(--sc);outline-offset:4px;border-radius:2px}
 .sub .sh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sub .nm{display:flex;align-items:center;gap:9px}
 .sub .sh strong{font-family:var(--display);font-size:1.2rem;font-weight:400}
 .sub .sh small{font-size:12px;color:var(--muted);text-align:right}
 .sub .img{display:block;font-size:14px;margin-top:4px;font-style:italic;color:var(--muted)}
@@ -125,6 +130,48 @@ th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:u
 .pill.no{color:var(--muted);border-color:var(--line)}
 .note{margin-top:22px;max-width:70ch;font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
 footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
+
+/* ---------- Fase 3: movimento ---------- */
+/* Reveal: só esconde quando o JS está ativo (.js), então sem JS tudo aparece. */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .8s ease var(--rd,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--rd,0s)}
+.js .rv.in{opacity:1;transform:none}
+/* Respiração do círculo, por quadrante: fogo rápido, ar leve, água lenta, terra mais lenta. */
+#circle .halo{opacity:0;pointer-events:none}
+#circle.alive .halo{animation:halo var(--bt) ease-in-out infinite}
+#circle.alive .qs{animation:qs var(--bt) ease-in-out infinite}
+@keyframes halo{0%,100%{opacity:.08}50%{opacity:.55}}
+@keyframes qs{0%,100%{filter:none}50%{filter:brightness(1.1) saturate(1.12)}}
+/* Ícones dos subtipos */
+.ico{width:30px;height:30px;flex:none;color:var(--sc);overflow:visible}
+.ico *{vector-effect:non-scaling-stroke;transform-box:fill-box}
+.ico .tw{animation:tw 1.6s ease-in-out infinite}
+.ico .tw:nth-child(2){animation-delay:.5s}.ico .tw:nth-child(3){animation-delay:1s}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+.ico .fl{transform-origin:50% 100%;animation:fl 1.3s ease-in-out infinite alternate}
+@keyframes fl{0%{transform:scale(1,1) skewX(0)}50%{transform:scale(.94,1.06) skewX(-3deg)}100%{transform:scale(1.03,.95) skewX(3deg)}}
+.ico .gl{transform-origin:50% 50%;animation:gl 3.2s ease-in-out infinite}
+@keyframes gl{0%,100%{opacity:.55}50%{opacity:1}}
+.ico .dash{stroke-dasharray:6 5;animation:dash 1.1s linear infinite}
+.ico .dash:nth-child(2){animation-duration:.8s}
+@keyframes dash{to{stroke-dashoffset:-22}}
+.ico .spin{transform-origin:50% 50%;animation:spin 9s linear infinite}
+.ico .spin.slow{animation-duration:24s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ico .sway{animation:sway 3.4s ease-in-out infinite alternate}
+@keyframes sway{from{transform:translateX(-2px)}to{transform:translateX(2px)}}
+.ico .rise{animation:rise 2.4s ease-in infinite}
+.ico .rise:nth-child(2){animation-delay:.8s}.ico .rise:nth-child(3){animation-delay:1.6s}
+@keyframes rise{0%{opacity:0;transform:translateY(5px)}40%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+.ico .bob{animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.ico .squish{transform-origin:50% 100%;animation:squish 4s ease-in-out infinite}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.07,.93)}}
+.ico .shine{animation:gl 5s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){
+  .js .rv{opacity:1;transform:none;transition:none}
+  #circle.alive .halo,#circle.alive .qs{animation:none}
+  .ico *{animation:none!important}
+}
 </style>
 
 <header class="hero">
@@ -136,7 +183,7 @@ footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
 </header>
 
 <div class="wrap stage">
-  <svg id="circle" viewBox="-300 -290 600 580" role="img" aria-labelledby="ctitle">
+  <svg id="circle" viewBox="-276 -278 552 556" role="img" aria-labelledby="ctitle">
     <title id="ctitle">Círculo dos temperamentos: sanguíneo (ar) em cima à esquerda, colérico (fogo) em cima à direita, melancólico (terra) embaixo à direita, fleumático (água) embaixo à esquerda. Em cima ficam os expansivos, à direita os marcados.</title>
     <g id="g-core"></g>
     <g id="g-sectors"></g>
@@ -217,10 +264,28 @@ footer{padding-block:24px 48px;font-size:13px;color:var(--muted)}
 <footer><div class="wrap">Morg Elements · estudo aberto sobre os quatro temperamentos.</div></footer>
 
 <script>
+document.documentElement.classList.add('js');
 const EL = {
   fogo:{cor:'var(--fogo)'}, ar:{cor:'var(--ar)'}, agua:{cor:'var(--agua)'}, terra:{cor:'var(--terra)'}
 };
-const mix = (a,b,p=60) => `color-mix(in oklab, ${EL[a].cor} ${p}%, ${EL[b].cor})`;
+const slug = n => n.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const subCor = s => `var(--s-${slug(s.nome)})`;
+/* Ícones (viewBox 0 0 32 32, traço na cor do subtipo) */
+const ICO = {
+ 'Faísca':'<path class="tw" d="M10 4v8M6 8h8"/><path class="tw" d="M23 9v6M20 12h6"/><path class="tw" d="M15 19v9M10.5 23.5h9"/>',
+ 'Fogo':'<path class="fl" d="M16 3c1 5 8 8 8 16a8 8 0 0 1-16 0c0-4 2-6.5 3.5-8.5 1 3 2 4.5 3.5 4.5-1-4 0-9 1-12z"/>',
+ 'Brasa':'<circle class="gl" cx="16" cy="20" r="6.5" fill="currentColor" fill-opacity=".55"/><path d="M7 27h18"/><path class="gl" style="animation-delay:1.2s" d="M13 11c1.5-2 0-3.5 1-6M19 12c1.5-2 0-3 1-5"/>',
+ 'Vento':'<path class="dash" d="M3 11h17a4 4 0 1 0-4-4"/><path class="dash" d="M3 17h25"/><path class="dash" d="M3 23h14a4 4 0 1 1-4 4"/>',
+ 'Ar':'<path class="spin" d="M16 6a10 10 0 1 1-9.5 13M16 11a5 5 0 1 1-4.7 6.7"/>',
+ 'Brisa':'<path class="sway" d="M4 13c4-3 8-3 12 0s8 3 12 0"/><path class="sway" style="animation-delay:-1.7s" d="M7 20c3-2 6-2 9 0s6 2 9 0"/>',
+ 'Vapor':'<path class="rise" d="M10 25c-2-3 2-5 0-8s2-5 0-8"/><path class="rise" d="M16 25c-2-3 2-5 0-8s2-5 0-8"/><path class="rise" d="M22 25c-2-3 2-5 0-8s2-5 0-8"/><path d="M6 28h20"/>',
+ 'Água':'<path class="bob" d="M16 4c4 6 8 10 8 15a8 8 0 0 1-16 0c0-5 4-9 8-15z"/>',
+ 'Gelo':'<g class="spin slow"><path d="M16 4v24M5.6 10l20.8 12M5.6 22l20.8-12"/><path d="M13 6.5l3 3 3-3M13 25.5l3-3 3 3"/></g>',
+ 'Argila':'<path class="squish" d="M6 25c0-6 4-12 10-12s10 6 10 12z"/><path d="M4 27h24"/>',
+ 'Terra':'<path d="M3 26c4-9 8-13 13-13s9 4 13 13z"/><path class="gl" d="M10 22h12M13 18h6"/><path class="sway" d="M16 13V6m0 3c2-2 4-2.5 4-2.5"/>',
+ 'Pedra':'<path d="M5 25l3-12 8-7 10 5 1 14z"/><path class="shine" d="M8 13l8 3 10-5M16 16v9"/>'
+};
+const icon = s => `<svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[s.nome]}</svg>`;
 const r = n => `<sup class="r"><a href="#ref${n}">${n}</a></sup>`;
 
 const T = [
@@ -425,16 +490,16 @@ const REFS = [
 
 /* ---------- Cards ---------- */
 const cols = document.getElementById('cols'), jump = document.getElementById('jump');
-const subId = (t,s) => `${t.id}-${s.nome.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase()}`;
+const subId = (t,s) => `${t.id}-${slug(s.nome)}`;
 T.forEach(t=>{
   const c = EL[t.el].cor;
   jump.insertAdjacentHTML('beforeend', `<a href="#${t.id}" style="--c:${c}"><i></i>${t.nome}</a>`);
   const subs = t.subs.map(s=>{
-    const sc = s.viz ? mix(t.el, s.vizEl, 62) : c;
+    const sc = subCor(s);
     const rows = [['Traços',s.tracos],['No trabalho',s.trabalho],['Nas relações',s.relacoes],['No conflito',s.conflito],
       ['Busca',s.busca],['Quando exagera',s.exagero],['Lembrar da base',s.base],['Equilíbrio',s.equilibrio]].filter(x=>x[1]);
     return `<details class="sub" id="${subId(t,s)}" style="--sc:${sc}">
-      <summary><span class="sh"><strong>${s.nome}</strong><small>${s.viz ? 'perto do '+s.vizNome : 'neutro, no centro'}</small></span>
+      <summary><span class="sh"><span class="nm">${icon(s)}<strong>${s.nome}</strong></span><small>${s.viz ? 'perto do '+s.vizNome : 'neutro, no centro'}</small></span>
       <span class="img">${s.imagem}</span></summary>
       <dl>${rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
     </details>`;
@@ -442,6 +507,7 @@ T.forEach(t=>{
   const cmp = `<table class="mini"><thead><tr><th scope="col">Subtipo</th><th scope="col">No conflito</th><th scope="col">Quando exagera</th></tr></thead><tbody>${
     t.subs.map(s=>`<tr><th scope="row">${s.nome}</th><td>${s.tc}</td><td>${s.te}</td></tr>`).join('')}</tbody></table>`;
   cols.insertAdjacentHTML('beforeend', `<article class="card" id="${t.id}" style="--c:${c}">
+    <canvas class="fx" data-el="${t.el}" aria-hidden="true"></canvas>
     <div class="top">
       <div class="el">${t.elNome}</div>
       <h3>${t.nome}</h3>
@@ -474,6 +540,7 @@ const annulus=(a0,a1,r0,r1)=>{const [x0,y0]=P(r1,a0),[x1,y1]=P(r1,a1),[x2,y2]=P(
 const wedge=(a0,a1,rr)=>{const [x0,y0]=P(rr,a0),[x1,y1]=P(rr,a1);return `M0,0L${x0},${y0}A${rr},${rr} 0 0 1 ${x1},${y1}Z`};
 
 // Quadrants clockwise from top: colérico 0–90, melancólico 90–180, fleumático 180–270, sanguíneo 270–360
+const BREATH = {fogo:2.6, ar:3.8, agua:5.4, terra:7.2};
 const Q = [
   {t:T[1], a:0,   order:['Faísca','Fogo','Brasa']},
   {t:T[2], a:90,  order:['Pedra','Terra','Argila']},
@@ -486,6 +553,8 @@ const gCore=document.getElementById('g-core'), gSec=document.getElementById('g-s
 Q.forEach((q,qi)=>{
   const c=EL[q.t.el].cor;
   const core = el('path',{d:wedge(q.a,q.a+90,R_IN), class:'grow', style:`fill:color-mix(in oklab, ${c} 22%, var(--bg));--d:${2.3+qi*.15}s`},gCore);
+  const qg=el('g',{class:'qs',style:`--bt:${BREATH[q.t.el]}s`},gSec);
+  el('path',{d:annulus(q.a+1,q.a+89,R_OUT+7,R_OUT+15),class:'halo',style:`fill:${c};--bt:${BREATH[q.t.el]}s`},gCore);
   const [tx,ty]=P(80,q.a+45);
   const lab=el('g',{class:'fade',style:`--d:${4.6+qi*.12}s`},gLab);
   el('text',{x:tx,y:ty-2,'text-anchor':'middle',class:'tname'},lab).textContent=q.t.nome;
@@ -494,10 +563,10 @@ Q.forEach((q,qi)=>{
   q.order.forEach((nm,si)=>{
     const s=q.t.subs.find(x=>x.nome===nm);
     const a0=q.a+si*30, a1=a0+30;
-    const fill = s.viz ? mix(q.t.el,s.vizEl,62) : c;
+    const fill = subCor(s);
     const p=el('path',{d:annulus(a0,a1,R_IN,R_OUT),class:'sector fade',tabindex:'0',role:'link',
       'aria-label':`${s.nome}, ${q.t.nome}${s.viz?' perto do '+s.vizNome:' neutro'}`,
-      style:`fill:${fill};--d:${3.0+qi*.25+si*.08}s`},gSec);
+      style:`fill:${fill};--d:${3.0+qi*.25+si*.08}s`},qg);
     const go=()=>{const target=document.getElementById(subId(q.t,s));target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
       target.open=true;target.classList.add('hl');setTimeout(()=>target.classList.remove('hl'),1800)};
     p.addEventListener('click',go);
@@ -526,7 +595,81 @@ ax.forEach(([t,x,y,rot],i)=>{
 });
 
 const svg=document.getElementById('circle');
-const play=()=>{svg.classList.remove('play');void svg.getBoundingClientRect();svg.classList.add('play')};
+let aliveT;
+const play=()=>{svg.classList.remove('play','alive');void svg.getBoundingClientRect();svg.classList.add('play');
+  clearTimeout(aliveT);aliveT=setTimeout(()=>svg.classList.add('alive'),6200)};
 play();
 document.getElementById('replay').addEventListener('click',()=>{svg.scrollIntoView({behavior:'smooth',block:'center'});play()});
+
+/* ---------- Revelação com o scroll ---------- */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+const rvSel = ['section h2','section .lead','.jump','.card','.prose','.tblw','.timeline li','.refs li','.note'];
+document.querySelectorAll(rvSel.join(',')).forEach(n=>{
+  n.classList.add('rv');
+  const sib=[...n.parentElement.children].filter(x=>x.matches(rvSel.join(','))&&x.tagName===n.tagName);
+  n.style.setProperty('--rd', Math.min(sib.indexOf(n),6)*0.09+'s');
+});
+const rvIO = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvIO.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv').forEach(n=>rvIO.observe(n));
+// Um link para uma âncora (referência, subtipo) mostra o alvo na hora.
+addEventListener('hashchange',()=>{const t=document.querySelector(location.hash);t&&t.closest('.rv')?.classList.add('in')});
+
+/* ---------- Efeito do elemento no topo de cada card ---------- */
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const FX = {
+  fogo:{
+    make:(w,h)=>({x:rnd(0,w),y:rnd(h*.3,h+6),vy:rnd(.35,1.3),r:rnd(.8,2.4),ph:rnd(0,6.3),life:rnd(.3,1)}),
+    n:w=>Math.round(w/7),
+    step(p,w,h,t){p.y-=p.vy;p.x+=Math.sin(t*.004+p.ph)*.35;p.life-=.007*p.vy;if(p.life<=0||p.y<-4)Object.assign(p,this.make(w,h),{y:h+4,life:1})},
+    bg(ctx,w,h,col){const g=ctx.createLinearGradient(0,h,0,h*.2);g.addColorStop(0,col);g.addColorStop(1,'transparent');ctx.globalAlpha=.22;ctx.fillStyle=g;ctx.fillRect(0,0,w,h)},
+    draw(ctx,p,col){ctx.globalAlpha=Math.max(0,p.life)*.9;ctx.fillStyle=col;ctx.beginPath();ctx.arc(p.x,p.y,p.r*(.5+p.life*.6),0,6.3);ctx.fill()}
+  },
+  agua:{
+    n:()=>0,
+    bg(ctx,w,h,col,t){for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(0,h);
+      for(let x=0;x<=w+4;x+=4)ctx.lineTo(x,h*.42+i*9+Math.sin(x*(.018-i*.004)+t*(.0011+i*.0004)+i*1.7)*(5-i));
+      ctx.lineTo(w,h);ctx.closePath();ctx.globalAlpha=.13+i*.05;ctx.fillStyle=col;ctx.fill()}}
+  },
+  terra:{
+    make:(w,h)=>({x:rnd(0,w),y:rnd(-h,h*.7),vy:rnd(.08,.3),s:rnd(1,2.2)}),
+    n:w=>Math.round(w/14),
+    step(p,w,h){p.y+=p.vy;if(p.y>h*.62)Object.assign(p,this.make(w,h),{y:-4})},
+    bg(ctx,w,h,col,t){for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(0,h);
+      for(let x=0;x<=w+8;x+=8)ctx.lineTo(x,h*.62+i*8+Math.sin(x*.012+i*2+t*.00012)*3);
+      ctx.lineTo(w,h);ctx.closePath();ctx.globalAlpha=.16+i*.09;ctx.fillStyle=col;ctx.fill()}},
+    draw(ctx,p,col){ctx.globalAlpha=.65;ctx.fillStyle=col;ctx.fillRect(p.x,p.y,p.s,p.s)}
+  },
+  ar:{
+    make:(w,h)=>({x:rnd(-w*.5,w),y:rnd(8,h-8),len:rnd(30,90),v:rnd(.6,1.8),ph:rnd(0,6.3)}),
+    n:w=>Math.round(w/28),
+    step(p,w,h){p.x+=p.v;if(p.x-p.len>w)Object.assign(p,this.make(w,h),{x:-rnd(0,40)})},
+    draw(ctx,p,col,t){ctx.globalAlpha=.55;ctx.strokeStyle=col;ctx.lineWidth=1.4;ctx.lineCap='round';ctx.beginPath();
+      for(let i=0;i<=10;i++){const x=p.x-p.len+p.len*i/10,y=p.y+Math.sin(x*.025+p.ph+t*.001)*4;i?ctx.lineTo(x,y):ctx.moveTo(x,y)}
+      const g=ctx.createLinearGradient(p.x-p.len,0,p.x,0);g.addColorStop(0,'transparent');g.addColorStop(1,col);ctx.strokeStyle=g;ctx.stroke()}
+  }
+};
+const fxList=[...document.querySelectorAll('canvas.fx')].map(cv=>{
+  const card=cv.closest('.card'), kind=FX[cv.dataset.el];
+  return {cv,ctx:cv.getContext('2d'),kind,card,ps:[],w:0,h:0,col:'#888',vis:false};
+});
+const fxSize=f=>{const d=Math.min(devicePixelRatio||1,2),r={width:f.cv.clientWidth,height:f.cv.clientHeight};f.w=r.width;f.h=r.height;
+  f.cv.width=Math.round(r.width*d);f.cv.height=Math.round(r.height*d);f.ctx.setTransform(d,0,0,d,0,0);
+  f.ps=Array.from({length:f.kind.n(f.w)},()=>f.kind.make(f.w,f.h))};
+const fxCol=f=>{f.col=getComputedStyle(f.card.querySelector('.el')).color};
+const fxFrame=(f,t)=>{const {ctx,kind,w,h,col}=f;ctx.clearRect(0,0,w,h);
+  kind.bg&&kind.bg(ctx,w,h,col,t);
+  f.ps.forEach(p=>{kind.step&&kind.step(p,w,h,t);kind.draw&&kind.draw(ctx,p,col,t)});ctx.globalAlpha=1};
+const fxStill=()=>fxList.forEach(f=>{fxCol(f);for(let i=0;i<240;i++)f.ps.forEach(p=>f.kind.step&&f.kind.step(p,f.w,f.h,i*16));fxFrame(f,4000)});
+let raf=0,frame=0;
+const loop=t=>{raf=0;if(reduce.matches)return;
+  if(frame++%45===0)fxList.forEach(fxCol);
+  let any=false;fxList.forEach(f=>{if(f.vis){any=true;fxFrame(f,t)}});
+  if(any)raf=requestAnimationFrame(loop)};
+const kick=()=>{if(!raf&&!reduce.matches)raf=requestAnimationFrame(loop)};
+const fxIO=new IntersectionObserver(es=>{es.forEach(e=>{const f=fxList.find(x=>x.cv===e.target);f.vis=e.isIntersecting});kick()});
+const ro=new ResizeObserver(()=>{fxList.forEach(fxSize);reduce.matches?fxStill():kick()});
+fxList.forEach(f=>{fxSize(f);fxCol(f);fxIO.observe(f.cv);ro.observe(f.cv)});
+if(reduce.matches)fxStill();
+reduce.addEventListener('change',()=>reduce.matches?fxStill():kick());
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{fxList.forEach(fxCol);if(reduce.matches)fxStill()});
 </script>
